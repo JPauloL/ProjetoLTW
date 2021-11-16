@@ -1,9 +1,9 @@
-import Game from 'gameState.js';
+const GameState = require('./GameState'); // Apagar
 
 let alpha = Number.MIN_VALUE; // Maximize
 let beta = Number.MAX_VALUE;  // Minimize
 
-export default class GameAI
+class Bot
 {
     difficulty;
 
@@ -12,14 +12,14 @@ export default class GameAI
         this.difficulty = difficulty;
     }
 
-    nextPlay(game)
+    play(game)
     {
-        return this.difficulty == 0 ? easy() : (this.difficulty == 1 ? medium() : hard());
+        return game.play(this.difficulty == 0 ? this.easy(game) : (this.difficulty == 1 ? this.medium(game) : this.hard(game)));
     }
 
     easy(game)
     {
-        console.log(Math.floor(Math.random(game.state.length) * ((10 / 2) - 1) + 1));
+        return Math.floor(Math.random() * ((game.state.length / 2) - 1)) + 1;
     }
 
     medium(game)
@@ -32,7 +32,8 @@ export default class GameAI
         // negamax com alpha beta prune
     }
 }
-console.log(Math.floor(Math.random() * ((10 / 2) - 1) + 1));
+
+module.exports = Bot; // Apagar
 
 // Alpha-Beta prune algorithm. Call alphaBeta(initialState, depth, Number.MIN_VALUE, Number.MAX_VALUE, true)
 function alphaBeta(state, depth, alpha, beta, maximizing)

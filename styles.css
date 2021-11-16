@@ -25,22 +25,31 @@ body {
 }
 
 .auth-button {
-    background-color: sandybrown;
-    border:0px;
+    background-color: sandybrown; /*#ff9955 cor do logo*/
+    border:4px;
     border-radius: 0.25rem;
     color: darkblue;
     padding: 12px 16px;
 }
 
 .auth-button:hover {
-    background-color: red;
+    color:darkslateblue;
+    cursor: pointer;
 }
 
 .auth-button:active {
-
+    background-color: wheat;
+    color: darkblue;
 }
 
 .game-board {
     background-color: green;
     
+}
+
+.dialog {
+    z-index: 1;
+    float: right;
+    border: 1px solid black;
+    border-radius: 0.25rem;
 }
