@@ -1,6 +1,7 @@
 /* dark blue: #081447 */
 
 body {
+    background-color: lightsteelblue;
     margin: 0;
     font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
 }
@@ -26,7 +27,7 @@ body {
 
 .auth-button {
     background-color: sandybrown; /*#ff9955 cor do logo*/
-    border:4px;
+    border: 4px transparent;
     border-radius: 0.25rem;
     color: darkblue;
     padding: 12px 16px;
@@ -47,9 +48,41 @@ body {
     
 }
 
-.dialog {
-    z-index: 1;
-    float: right;
+.authDialog {
+    z-index: 10;
+    position: absolute;
+    background-color: lightgray;
+    box-shadow: 5px 5px darkgray;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    top: 20%;
+    left: 40%;
+    width: 20%;
+    height: 256px;
     border: 1px solid black;
     border-radius: 0.25rem;
+    font-size: x-large;
+    font-weight: bold;
+    color: orange;
+}
+
+.dialogForm {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+.authInput {
+    margin-bottom: 4px;
+}
+
+.authSubmit {
+    margin-top: 12px;
+}
+
+.authLabel {
+    color:darkblue;
+    font-size: medium;
 }

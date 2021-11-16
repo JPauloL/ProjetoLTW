@@ -11,7 +11,8 @@ class GameState
 
     getState()
     {
-        return this.player ? this.state : ; // Trocar os lados 
+        console.log(this.state.slice(this.state.length / 2).concat(this.state.slice(0, this.state.length / 2)));
+        return this.player ? this.state : this.state.slice(this.state.length / 2).concat(this.state.slice(0, this.state.length / 2)); // Trocar os lados 
     }
 
     bank(player) 

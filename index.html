@@ -20,16 +20,26 @@
 
         <nav class="nav-bar">
             <div class="brand">
-                <img src="logo.svg" height=64 width=64>
+                <img src="logo.svg" alt="logo" height=64 width=64>
                 <span>Play Mancala!</span>
             </div>
             <div class="auth">
                 <button class="auth-button">Sign in</button>
-                <button class="auth-button">Sign up</button>
+                <!-- <button class="auth-button">Sign up</button> -->
             </div>
         </nav>
 
-        <div class="dialog">Hello, I'm a dialog</div>
+        <div class="authDialog">
+            Sign in
+            <form class="dialogForm">
+                <label class="authLabel">Username:</label>
+                <input type="text" class="authInput">
+                <label class="authLabel">Password:</label>
+                <input type="password" class="authInput">
+                <input type="submit" class="authSubmit" value="Login">
+            </form>
+            <img src="logo.svg" alt="logo" height=64 width=64>
+        </div>
 
         <div class="game-board">
             <span class="bank"></span>
