@@ -17,7 +17,7 @@
 
     </head>
     <body>
-        
+
         <nav class="nav-bar">
             <div class="brand">
                 <img src="logo.svg" alt="logo" height=64 width=64>
@@ -35,11 +35,10 @@
             <div style="justify-content: center;">
                 <button id="rules-button" class="initial-button">Rules</button>
                 <button id="ranking-button" class="initial-button">Ranking</button>
-                <button id="settings-button" class="initial-button">Settings</button>
                 <button id="play-button" class="initial-button">Start game</button>
             </div>
         </div>
-    
+
         <div id="game-board" class="hidden">
         </div>
 
@@ -47,7 +46,7 @@
             <div id="rules-dialog" class="dialog hidden">
                 Fill this dialog with rules.
             </div>
-            
+
             <div id="ranking-dialog" class="dialog hidden">
                 Ranking is empty.
             </div>
@@ -63,9 +62,8 @@
                 </form>
                 <img src="logo.svg" alt="logo" height=64 width=64>
             </div>
-        </div>
 
-        <div id="config-dialog" class="dialog">
+        <div id="settings-dialog" class="dialog hidden">
             Game settings
             <form class="dialogForm">
                 <div>
@@ -95,17 +93,44 @@
                     </select>
                 </div>
 
+
                 <div>
                     <label class="form-label" for="oppo-select">Opponent:</label>
+                    <div>
+                        <div>
+                          <input type="radio" id="bot" name="oppo-select" value="bot"  checked>
+                          <label for="bot" class="radio-label" >Bot</label>
+                        </div>
+                        <div>
+                          <input type="radio" id="human" name="oppo-select" value="human" disabled>
+                          <label for="human" class="radio-label">Human</label>
+                        </div>
+                      </span>
+                </div>
+                <div>
+                  <label class="form-label" for="difficulty-select">Difficulty:</label>
+                  <select id="pit-select">
+                    <!-- <option>3</option> -->
+                    <option>Easy</option>
+                    <option selected >Medium</option>
+                    <option>Hard</option>
+                  </select>
+                </div>
+                <div>
+                    <label class="form-label" for="side-select">Side:</label>
                     <span>
-                        <input type="radio" id="bot" name="oppo-select" value="bot" checked>
-                        <label for="bot">Bot</label>
-                        <input type="radio" id="human" name="oppo-select" value="human" disabled>
-                        <label for="human">Human</label>
+                        <input type="radio" id="feft" name="side-select" value="left" checked>
+                        <label for="left" class="radio-label" >Left</label>
+                        <input type="radio" id="right" name="side-select" value="right" checked>
+                        <label for="Right" class="radio-label">Right</label>
                     </span>
                 </div>
+
+
+                <input type ="submit" value ="Start Game !" class ="start-button inputbutton" >
             </form>
         </div>
+      </div>
 
         <script src="auth.js"></script>
     </body>
