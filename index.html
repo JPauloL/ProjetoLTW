@@ -17,40 +17,96 @@
 
     </head>
     <body>
-
+        
         <nav class="nav-bar">
             <div class="brand">
                 <img src="logo.svg" alt="logo" height=64 width=64>
                 <span>Play Mancala!</span>
             </div>
             <div class="auth">
-                <button class="auth-button">Sign in</button>
+                <button id="sign-in-button" class="auth-button">Sign in</button>
                 <!-- <button class="auth-button">Sign up</button> -->
             </div>
         </nav>
 
-        <div class="authDialog">
-            Sign in
-            <form class="dialogForm">
-                <label class="authLabel">Username:</label>
-                <input type="text" class="authInput">
-                <label class="authLabel">Password:</label>
-                <input type="password" class="authInput">
-                <input type="submit" class="authSubmit" value="Login">
-            </form>
-            <img src="logo.svg" alt="logo" height=64 width=64>
+        <div id="initial-page">
+            <h1>Welcome to Play Mancala!</h1>
+            Create an account or sign in to start playing!
+            <div style="justify-content: center;">
+                <button id="rules-button" class="initial-button">Rules</button>
+                <button id="ranking-button" class="initial-button">Ranking</button>
+                <button id="settings-button" class="initial-button">Settings</button>
+                <button id="play-button" class="initial-button">Start game</button>
+            </div>
+        </div>
+    
+        <div id="game-board" class="hidden">
         </div>
 
-        <div class="game-board">
-            <span class="bank"></span>
+        <div id="back-drop" class="hidden">
+            <div id="rules-dialog" class="dialog hidden">
+                Fill this dialog with rules.
+            </div>
             
-            <span class="bank"></span>
+            <div id="ranking-dialog" class="dialog hidden">
+                Ranking is empty.
+            </div>
+
+            <div id="auth-dialog" class="dialog hidden">
+                Sign in
+                <form class="dialogForm">
+                    <label class="form-label" for="username-input">Username:</label>
+                    <input id="username-input" type="text" class="authInput">
+                    <label class="form-label" for="password-input">Password:</label>
+                    <input id="password-input" type="password" class="authInput">
+                    <input type="submit" class="authSubmit" value="Login">
+                </form>
+                <img src="logo.svg" alt="logo" height=64 width=64>
+            </div>
         </div>
 
-        <div class="ranking">
+        <div id="config-dialog" class="dialog">
+            Game settings
+            <form class="dialogForm">
+                <div>
+                    <label class="form-label" for="pit-select">Number of pits:</label>
+                    <select id="pit-select">
+                        <!-- <option>10</option> -->
+                        <option>9</option>
+                        <option>8</option>
+                        <option>7</option>
+                        <option selected>6</option>
+                        <option>5</option>
+                        <option>4</option>
+                        <option>3</option>
+                        <option>2</option>
+                        <option>1</option>
+                    </select>
+                </div>
 
+                <div>
+                    <label class="form-label" for="seeds-select">Number of seeds:</label>
+                    <select id="seeds-select">
+                        <option>5</option>
+                        <option selected>4</option>
+                        <option>3</option>
+                        <option>2</option>
+                        <option>1</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="form-label" for="oppo-select">Opponent:</label>
+                    <span>
+                        <input type="radio" id="bot" name="oppo-select" value="bot" checked>
+                        <label for="bot">Bot</label>
+                        <input type="radio" id="human" name="oppo-select" value="human" disabled>
+                        <label for="human">Human</label>
+                    </span>
+                </div>
+            </form>
         </div>
 
-
+        <script src="auth.js"></script>
     </body>
 </html>

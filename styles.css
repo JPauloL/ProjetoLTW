@@ -43,28 +43,74 @@ body {
     color: darkblue;
 }
 
-.game-board {
+#game-board {
     background-color: green;
     
 }
 
-.authDialog {
+#back-drop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     z-index: 10;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#initial-page {
+    text-align: center;
+}
+
+.initial-button {
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 2px solid darkblue;
+    border-radius: 0.25rem;
+    /* color: darkblue; */
+    padding: 12px 16px;
+}
+
+.initial-button:hover {
+    color:darkslateblue;
+    cursor: pointer;
+}
+
+.initial-button:active {
+    background-color: wheat;
+    color: darkblue;
+}
+
+.dialog {
     position: absolute;
     background-color: lightgray;
-    box-shadow: 5px 5px darkgray;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     top: 20%;
     left: 40%;
-    width: 20%;
-    height: 256px;
     border: 1px solid black;
     border-radius: 0.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+    width: 20%;
+    min-height: 300px;
     font-size: x-large;
     font-weight: bold;
-    color: orange;
+    color: sandybrown;
+}
+
+#auth-dialog {
+}
+
+#rules-dialog {
+    text-align: center;
+}
+
+#ranking-dialog {
+}
+
+#config-dialog {
+
 }
 
 .dialogForm {
@@ -82,7 +128,11 @@ body {
     margin-top: 12px;
 }
 
-.authLabel {
+.form-label {
     color:darkblue;
     font-size: medium;
+}
+
+.hidden {
+    display: none !important;
 }
