@@ -43,3 +43,7 @@ startButton.addEventListener("click",
                                         backDrop.classList.remove("hidden");
                                         settingsDialog.classList.remove("hidden");
                             });
+
+////////////////////
+
+createBoard(6, 5);

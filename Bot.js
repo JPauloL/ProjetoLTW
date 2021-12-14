@@ -12,6 +12,14 @@ class Bot
         this.difficulty = difficulty;
     }
 
+    update(p, game)
+    {
+        if (p)
+        {
+            play(game);
+        }
+    }
+
     play(game)
     {
         return game.play(this.difficulty == 0 ? this.easy(game) : (this.difficulty == 1 ? this.medium(game) : this.hard(game)));

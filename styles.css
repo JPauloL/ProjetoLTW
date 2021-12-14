@@ -6,6 +6,11 @@ body {
     font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
 }
 
+#page-content {
+    display: flex;
+    justify-content: center;
+}
+
 .nav-bar {
     align-items: center;
     background-color: darkblue;
@@ -25,7 +30,6 @@ body {
     margin-right: 16px;
 }
 
-
 .auth-button {
     background-color: sandybrown; /*#ff9955 cor do logo*/
     border: 4px transparent;
@@ -34,15 +38,9 @@ body {
     padding: 12px 16px;
 }
 
-.start-button{
-  background-color: sandybrown; /*#ff9955 cor do logo*/
+#start-button{
   margin-top: 16px;
-  border: 4px transparent;
-  border-radius: 0.25rem;
-  color: darkblue;
   padding: 16px 100px;
-
-
 }
 .radiodiv{
   display: flex;
@@ -54,24 +52,9 @@ button:hover {
     cursor: pointer;
 }
 
-.inputbutton:hover {
-    color:darkslateblue;
-    cursor: pointer;
-}
-
-.inputbutton:active {
-    background-color: wheat;
-    color: darkblue;
-}
-
 .auth-button:active {
     background-color: wheat;
     color: darkblue;
-}
-
-#game-board {
-    background-color: green;
-
 }
 
 #back-drop {
@@ -95,7 +78,6 @@ button:hover {
     /* color: darkblue; */
     padding: 12px 16px;
 }
-
 
 .initial-button:active {
     background-color: wheat;
@@ -125,6 +107,78 @@ button:hover {
     font-size: x-large;
     font-weight: bold;
     color: sandybrown;
+}
+
+#game-area {
+    background-color: green; /* saddle brown ??? */
+    display: inline-block;
+    margin-top: 8px;
+}
+
+#score-area {
+    background-color: gainsboro;
+    display: flex;
+    justify-content: space-between;
+}
+
+.player-score {
+    width: 150px;
+}
+
+.name-display {
+    border-color: black;
+    border-style: solid;
+    border-width: 0px 1px 1px;
+    text-align: center;
+}
+
+.score-display {
+    border-color: black;
+    border-style: solid;
+    border-width: 0px 1px;
+    text-align: center;
+}
+
+#game-message {
+    background-color: black;
+    border: 2px solid white;
+    color: white;
+    font-size: x-large;
+    text-align: center;
+    padding: 4px;
+    margin: 8px;
+}
+
+#game-board {
+    display: flex;
+    justify-content: space-around;
+    padding: 12px;
+}
+
+.bank {
+    height: 192px;
+    width: 84px;
+    margin: 8px 12px;
+    border-radius: 44%; /* alterar se tamanho mudar */
+    background-color: sandybrown;
+    border: 4px inset black
+}
+
+.pit {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    margin-left: 8px;
+    margin-right: 8px;
+    width: 84px;
+    height: 84px;
+    border-radius: 30%;
+    background-color: sandybrown;
+    border: 4px inset black
+}
+
+#pits-div {
+    display: flex;
+    flex-wrap: wrap-reverse;
 }
 
 #auth-dialog {

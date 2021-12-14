@@ -5,42 +5,41 @@ class Game
     playerOne;
     playerTwo;
     game;
+    lastPlayTime;
 
-    constructor(size, numSeeds, starterSide, players)
+    constructor(state, starterSide, players)
     {
-        this.game = new GameState(size, numSeeds);
-        
         if (players.length !== 2)
         {
             return;
         }
 
-        if (starterSide)
-        {
-            [this.playerOne, this.playerTwo] = players;
-        }
-        else
-        {
-            [this.playerTwo, this.playerOne] = players;   
-        }
+        this.game = state;
+        this.player = starterSide;
+        [this.playerOne, this.playerTwo] = players;
     }
 
-    async run()
+    async start()
     {
-        console.log(this.game.toString());
-        while (!this.game.isFinal())
-        {   
-            // await new Promise(resolve => setTimeout(resolve, 1000));
-            
-            const player = this.game.player ? this.playerOne : this.playerTwo
+        // Colocar um limite de tempo para a jogada (se passar o limite, o jogador perder o jogo)
+        // setInterval(() => {}, 60000);        
 
-            while ((await player.play(this.game)) < 0);
-            console.log(this.game.toString());
-        }
+        const player = this.game.player ? this.playerOne : this.playerTwo
 
         const score = this.game.score();
+    }
 
-        console.log((score > 0 ? "Player 1 wins! (" + score + ")" : (score < 0 ? "Player 2 wins! (" + -score + ")" : "It's a draw")));
+    notifyPlayers()
+    {
+        // Substituir por server comms
+        this.playerOne.update(this.player, this.game.state);
+        this.playerTwo.update(!this.player, this.game.state);
+    }
+
+    play(pos)
+    {
+        this.game.play(pos);
+        this.notifyPlayers();
     }
 }
 

@@ -29,17 +29,36 @@
             </div>
         </nav>
 
-        <div id="initial-page">
-            <h1>Welcome to Play Mancala!</h1>
-            Create an account or sign in to start playing!
-            <div style="justify-content: center;">
-                <button id="rules-button" class="initial-button">Rules</button>
-                <button id="ranking-button" class="initial-button">Ranking</button>
-                <button id="play-button" class="initial-button">Start game</button>
+        <div id="page-content">
+            <div id="initial-page">
+                <h1>Welcome to Play Mancala!</h1>
+                Create an account or sign in to start playing!
+                <div style="justify-content: center;">
+                    <button id="rules-button" class="initial-button">Rules</button>
+                    <button id="ranking-button" class="initial-button">Ranking</button>
+                    <button id="play-button" class="initial-button">Start game</button>
+                </div>
             </div>
-        </div>
-
-        <div id="game-board" class="hidden">
+            <!-- add hidden -->
+            <div id="game-area" class="hidden">
+                <div id="score-area">
+                    <div class="player-score">
+                        <div class="name-display">Player 2</div>
+                        <div id="player-two-score" class="score-display">30</div>
+                    </div>
+                    
+                    <div style="flex-grow: 10; text-align: center;">
+                        <div style=" border-bottom: 1px solid black;">&nbsp;</div>
+                        <div>Score</div>
+                    </div>
+                    <div class="player-score">
+                        <div class="name-display">Player 1</div>
+                        <div id="player-one-score" class="score-display">30</div>
+                    </div>
+                </div>
+                <div id="game-message">Game Started</div>
+                <div id="game-board"></div>
+            </div>
         </div>
 
         <div id="back-drop" class="hidden">
@@ -93,23 +112,16 @@
                     </select>
                 </div>
 
-
                 <div>
-                    <label class="form-label" for="oppo-select">Opponent:</label>
-                    <div>
-                        <div>
-                          <input type="radio" id="bot" name="oppo-select" value="bot"  checked>
-                          <label for="bot" class="radio-label" >Bot</label>
-                        </div>
-                        <div>
-                          <input type="radio" id="human" name="oppo-select" value="human" disabled>
-                          <label for="human" class="radio-label">Human</label>
-                        </div>
-                      </span>
+                    <label class="form-label">Opponent:</label>
+                    <input type="radio" id="bot" name="oppo-select" value="bot"  checked>
+                    <label for="bot" class="radio-label" >Bot</label>
+                    <input type="radio" id="human" name="oppo-select" value="human" disabled>
+                    <label for="human" class="radio-label">Human</label>
                 </div>
                 <div>
                   <label class="form-label" for="difficulty-select">Difficulty:</label>
-                  <select id="pit-select">
+                  <select id="difficulty-select">
                     <!-- <option>3</option> -->
                     <option>Easy</option>
                     <option selected >Medium</option>
@@ -117,21 +129,22 @@
                   </select>
                 </div>
                 <div>
-                    <label class="form-label" for="side-select">Side:</label>
+                    <label class="form-label">Side:</label>
                     <span>
-                        <input type="radio" id="feft" name="side-select" value="left" checked>
-                        <label for="left" class="radio-label" >Left</label>
-                        <input type="radio" id="right" name="side-select" value="right" checked>
-                        <label for="Right" class="radio-label">Right</label>
+                        <input type="radio" id="First" name="side-select" value="First" checked>
+                        <label for="First" class="radio-label" >First</label>
+                        <input type="radio" id="Second" name="side-select" value="Second" checked>
+                        <label for="Second" class="radio-label">Second</label>
                     </span>
                 </div>
 
 
-                <input type ="submit" value ="Start Game !" class ="start-button inputbutton" >
+                <input type ="submit" value ="Start Game !" id="start-button" class ="auth-button"  onsubmit="startGame()" >
             </form>
         </div>
       </div>
 
+        <script src="game-board.js"></script>
         <script src="auth.js"></script>
     </body>
 </html>
