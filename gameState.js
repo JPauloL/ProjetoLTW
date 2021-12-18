@@ -3,23 +3,39 @@ class GameState
     state;
     player;
 
-    constructor(size, numSeeds)
+    constructor(size, numSeeds, player)
     {
         this.state = Array(2 * (size + 1)).fill(1).map((_, i, arr) => i % (arr.length / 2) == 0 ? 0 : numSeeds);
-        this.player = true;
+        this.player = player;
+    }
+
+    getPlayer()
+    {
+        return this.player;
+    }
+
+    getSize()
+    {
+        return this.state.length;
     }
 
     getState()
     {
-        console.log(this.state.slice(this.state.length / 2).concat(this.state.slice(0, this.state.length / 2)));
+        // console.log(this.state.slice(this.state.length / 2).concat(this.state.slice(0, this.state.length / 2)));
         return this.player ? this.state : this.state.slice(this.state.length / 2).concat(this.state.slice(0, this.state.length / 2)); // Trocar os lados 
     }
 
-    bank(player) 
+    getBank(player) 
     {
         return player ? this.state.length / 2 : 0;
     }
- 
+
+    getPlayerScore(player)
+    {
+        return this.state[this.getBank(player)];
+    }
+
+    // Evitar usar ()
     playerScore(player)
     {
         const len = this.state.length;
@@ -35,17 +51,41 @@ class GameState
         //     || this.state.slice((len / 2) + 1, len).reduce((prev, cur) => prev + cur) == 0;
     }
 
-    score()
+
+    getGameScore()
     {
-        const [playersBank, oppoBank] = [this.bank(1), this.bank(0)];
+        return this.state[this.getBank(true)] - this.state[this.getBank(false)];
+    }
+
+    // Evitar usar
+    getScore()
+    {
+        const [playersBank, oppoBank] = [this.getBank(1), this.getBank(0)];
         return (this.state[playersBank] + this.playerScore(1)) - (this.state[oppoBank] + this.playerScore(0));
+    }
+
+    finishGame()
+    {
+        const [playersBank, oppoBank] = [this.getBank(true), this.getBank(false)];
+        
+        const len = this.state.length;
+        // this.state[playersBank] += this.state.slice(1, playersBank - 1).reduce((prev, cur) => prev + cur); 
+        // this.state[oppoBank] += this.state.slice(playersBank + 1, len).reduce((prev, cur) => prev + cur);
+
+        this.state[playersBank] += this.playerScore(true);
+        this.state[oppoBank] += this.playerScore(false);
+    }
+
+    isPlayerSide(pos)
+    {
+        const len = this.state.length;
+        return pos >= 1 + ((len / 2) * !this.player) && pos < (len / (1 + this.player));
     }
 
     play(pos)
     {
         const normPos = this.player ? pos : pos + this.state.length / 2;
         if (pos <= 0 || pos >= (this.state.length / 2) || this.state[normPos] === 0) return -1;
-        if (this.isFinal()) return -2;
         
         console.log("\n" + (this.player ? "Player 1: " : "Player 2: ") + pos + "\n");
         return this.sow(normPos);
@@ -53,10 +93,9 @@ class GameState
 
     sow(pos)
     {   
-        
         const len = this.state.length;
         let n = this.state[pos];
-        const [playersBank, oppoBank] = [this.bank(this.player), this.bank(!this.player)];
+        const [playersBank, oppoBank] = [this.getBank(this.player), this.getBank(!this.player)];
         this.state[pos] = 0;
 
         for (let i = 1; i <= n; i++)
@@ -73,7 +112,7 @@ class GameState
         const lastPos = (pos + n) % len;
         if (lastPos != playersBank)
         {
-            if (this.state[lastPos] === 1 && lastPos >= 1 + ((len / 2) * !this.player) && lastPos < (len / (1 + this.player)) && this.state[this.state.length - lastPos] > 0)
+            if (this.state[lastPos] === 1 && this.state[this.state.length - lastPos] > 0 && this.isPlayerSide(lastPos))
             {
                 this.state[playersBank] += this.state[lastPos] + this.state[this.state.length - lastPos];
                 this.state[lastPos] = this.state[this.state.length - lastPos] = 0;
@@ -82,18 +121,23 @@ class GameState
             this.player = !this.player;
         }
 
+        if (this.isFinal()) 
+        {
+            this.finishGame();
+        }
+
         return 0;
     }
 
     toString()
     {
         return "  " + this.state.reduce((prev, cur, i) => i > this.state.length / 2 ?  " " + cur + prev : prev, "") + "\n" 
-        + this.state[0] + String(" ").repeat(this.state.length) + " " + this.state[this.bank(1)] + "\n" 
+        + this.state[0] + String(" ").repeat(this.state.length) + " " + this.state[this.getBank(1)] + "\n" 
         + "  " + this.state.reduce((prev, cur, i) => (i < (this.state.length / 2)) && (i > 0) ?  prev + " " + cur : prev + "", "");
     }
 }
 
-module.exports = GameState; // Apagar
+// module.exports = GameState; // Apagar
 
 // let game = new GameState(6, 4);
 // console.log(game.toString());

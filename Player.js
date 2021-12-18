@@ -7,6 +7,7 @@ class Player
 {
     type;
     bot;
+    //
 
     constructor(type, diff)
     {

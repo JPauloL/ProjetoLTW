@@ -39,25 +39,7 @@
                     <button id="play-button" class="initial-button">Start game</button>
                 </div>
             </div>
-            <!-- add hidden -->
             <div id="game-area" class="hidden">
-                <div id="score-area">
-                    <div class="player-score">
-                        <div class="name-display">Player 2</div>
-                        <div id="player-two-score" class="score-display">30</div>
-                    </div>
-                    
-                    <div style="flex-grow: 10; text-align: center;">
-                        <div style=" border-bottom: 1px solid black;">&nbsp;</div>
-                        <div>Score</div>
-                    </div>
-                    <div class="player-score">
-                        <div class="name-display">Player 1</div>
-                        <div id="player-one-score" class="score-display">30</div>
-                    </div>
-                </div>
-                <div id="game-message">Game Started</div>
-                <div id="game-board"></div>
             </div>
         </div>
 
@@ -72,7 +54,7 @@
 
             <div id="auth-dialog" class="dialog hidden">
                 Sign in
-                <form class="dialogForm">
+                <form class="dialogForm" method="post" action="/login">
                     <label class="form-label" for="username-input">Username:</label>
                     <input id="username-input" type="text" class="authInput">
                     <label class="form-label" for="password-input">Password:</label>
@@ -86,8 +68,8 @@
             Game settings
             <form class="dialogForm">
                 <div>
-                    <label class="form-label" for="pit-select">Number of pits:</label>
-                    <select id="pit-select">
+                    <label class="form-label" for="house-select">Number of houses:</label>
+                    <select id="house-select">
                         <!-- <option>10</option> -->
                         <option>9</option>
                         <option>8</option>
@@ -144,7 +126,14 @@
         </div>
       </div>
 
-        <script src="game-board.js"></script>
-        <script src="auth.js"></script>
+      <script src="Bot.js"></script>
+      <script src="GameState.js"></script>
+      <script src="Scoreboard.js"></script>
+      <script src="Message.js"></script>
+      <script src="Seed.js"></script>
+      <script src="House.js"></script>
+      <script src="GameBoard.js"></script>
+      <script src="Game.js"></script>
+      <script src="initialization.js"></script>
     </body>
 </html>

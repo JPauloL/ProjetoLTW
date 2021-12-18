@@ -1,5 +1,3 @@
-const GameState = require('./GameState'); // Apagar
-
 let alpha = Number.MIN_VALUE; // Maximize
 let beta = Number.MAX_VALUE;  // Minimize
 
@@ -12,25 +10,22 @@ class Bot
         this.difficulty = difficulty;
     }
 
-    update(p, game)
+    update(state)
     {
-        if (p)
-        {
-            play(game);
-        }
+        return play(state);
     }
 
-    play(game)
+    play(state)
     {
-        return game.play(this.difficulty == 0 ? this.easy(game) : (this.difficulty == 1 ? this.medium(game) : this.hard(game)));
+        return (this.difficulty == 0 ? this.easy(state) : (this.difficulty == 1 ? this.medium(state) : this.hard(state)));
     }
 
-    easy(game)
+    easy(state)
     {
-        return Math.floor(Math.random() * ((game.state.length / 2) - 1)) + 1;
+        return Math.floor(Math.random() * ((state.length / 2) - 1)) + 1;
     }
 
-    medium(game)
+    medium(state)
     {
         // Calcular best-first (last lands on bank state[pos] = state.length - pos) > (maximize)
     }
@@ -40,8 +35,6 @@ class Bot
         // negamax com alpha beta prune
     }
 }
-
-module.exports = Bot; // Apagar
 
 // Alpha-Beta prune algorithm. Call alphaBeta(initialState, depth, Number.MIN_VALUE, Number.MAX_VALUE, true)
 function alphaBeta(state, depth, alpha, beta, maximizing)

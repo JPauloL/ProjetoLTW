@@ -75,7 +75,6 @@ button:hover {
     background-color: rgba(0, 0, 0, 0.1);
     border: 2px solid darkblue;
     border-radius: 0.25rem;
-    /* color: darkblue; */
     padding: 12px 16px;
 }
 
@@ -87,7 +86,6 @@ button:hover {
 .radio-label{
   font-size: medium;
   color: maroon;
-
 }
 
 .dialog {
@@ -110,26 +108,30 @@ button:hover {
 }
 
 #game-area {
-    background-color: green; /* saddle brown ??? */
+    background-color: #803300; /* saddle brown ??? */
     display: inline-block;
     margin-top: 8px;
 }
 
-#score-area {
-    background-color: gainsboro;
+#score-board {
     display: flex;
     justify-content: space-between;
+    margin: 8px 8px 0px;
+    border-top: 2px solid white;
+    background-color: black;
+    color: white;
 }
 
-.player-score {
+.score-column {
     width: 150px;
+    border-left: 2px solid white;
+    border-right: 2px solid white;
 }
 
 .name-display {
-    border-color: black;
-    border-style: solid;
-    border-width: 0px 1px 1px;
+    border-bottom: 2px solid white;
     text-align: center;
+    padding: 2px;
 }
 
 .score-display {
@@ -137,19 +139,21 @@ button:hover {
     border-style: solid;
     border-width: 0px 1px;
     text-align: center;
+    padding: 2px;
 }
 
-#game-message {
+#message-panel {
     background-color: black;
     border: 2px solid white;
     color: white;
     font-size: x-large;
     text-align: center;
     padding: 4px;
-    margin: 8px;
+    margin: 0px 8px 8px;
 }
 
 #game-board {
+    position: relative;
     display: flex;
     justify-content: space-around;
     padding: 12px;
@@ -164,7 +168,7 @@ button:hover {
     border: 4px inset black
 }
 
-.pit {
+.house {
     margin-top: 8px;
     margin-bottom: 8px;
     margin-left: 8px;
@@ -173,26 +177,22 @@ button:hover {
     height: 84px;
     border-radius: 30%;
     background-color: sandybrown;
-    border: 4px inset black
+    border: 4px inset black;
+    box-shadow: inset 5px 5px rgba(0,0,0,0.3);
 }
 
-#pits-div {
+#houses-div {
     display: flex;
     flex-wrap: wrap-reverse;
 }
 
-#auth-dialog {
+#canvas {
+    position: absolute;
+    pointer-events: none;
 }
 
 #rules-dialog {
     text-align: center;
-}
-
-#ranking-dialog {
-}
-
-#settings-dialog {
-
 }
 
 .dialogForm {
@@ -213,6 +213,16 @@ button:hover {
 .form-label {
     color:darkblue;
     font-size: medium;
+}
+
+.clickable {
+    cursor: pointer;
+    border-color: #8b8bfc;
+}
+
+.clickable:hover {
+    cursor: pointer;
+    border-color: blue;
 }
 
 .hidden {
