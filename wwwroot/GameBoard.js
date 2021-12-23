@@ -47,7 +47,14 @@ class GameBoard
         for (let i = 0; i < size / 2; i++)
         {
             this.houses[i] = new House(i % (size / 2) === 0, seeds);
-            this.houses[i].element.addEventListener("click", () => game.selfPlay(i));
+            this.houses[i].element.addEventListener("click", () => {
+                this.setClickableHouses(false);
+                
+                if (game.selfPlay(i) < 0 && game.player)
+                {
+                    this.setClickableHouses(true);
+                }
+            });
             
             if (this.houses[i].bank) continue;
          
@@ -57,7 +64,6 @@ class GameBoard
         for (let i = size - 1; i >= size / 2; i--)
         {
             this.houses[i] = new House(i % (size / 2) === 0, seeds);
-            this.houses[i].element.addEventListener("click", () => game.selfPlay(i));
             
             if (this.houses[i].bank) continue;
          
@@ -118,8 +124,9 @@ class GameBoard
         return playerBank !== 0 ? pos < playerBank : pos > this.houses.length / 2;
     }
 
-    play(pos, playerBank)
+    play(pos)
     {        
+        const playerBank = pos < this.houses.length / 2 ? this.houses.length / 2 : 0;
         const source = this.houses[pos];
         let i = 1;
         let n = source.seeds.length;
@@ -140,7 +147,7 @@ class GameBoard
 
         const lastHouse = (pos + i - 1) % this.houses.length;
        
-        if (!this.houses[lastHouse].bank && this.isPlayerSide(playerBank, lastHouse) && this.houses[lastHouse].seeds.length === 1 && this.houses[this.houses.length - lastHouse].seeds.length > 0)
+        if (!this.houses[lastHouse].bank && this.isPlayerSide(playerBank, lastHouse) && this.houses[lastHouse].seeds.length === 1)// && this.houses[this.houses.length - lastHouse].seeds.length > 0)
         {
             console.log("Capturing...");
             let target = this.houses[playerBank];

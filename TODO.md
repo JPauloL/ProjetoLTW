@@ -6,3 +6,12 @@
 
 ## GameBoard
 - Adicionar animações
+
+## GameState
+- Verificar a funçao getState
+
+## Visual
+- Alterar display do username
+- Aumentar tamanhos
+- Alterar pagina inicial
+- Alterar CSS dos botoes durante o jogo

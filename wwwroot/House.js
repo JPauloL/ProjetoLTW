@@ -42,11 +42,12 @@ class House
     {
         this.x = this.element.offsetLeft + (this.element.clientWidth / 2) -7;
         this.y = this.element.offsetTop + (this.element.clientHeight / 2) - 7;
+        const r = Math.floor(Math.random() * 4);
 
         for (let i = 0; i < this.seeds.length; i++)
         {
             const pos = this.newSeedPosition();
-            this.seeds[i] = new Seed(pos.x, pos.y, colors[i % colors.length]);
+            this.seeds[i] = new Seed(pos.x, pos.y, colors[(i + r) % colors.length]);
         }
     }
 

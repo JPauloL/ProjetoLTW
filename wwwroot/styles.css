@@ -57,8 +57,19 @@ button:hover {
     color: darkblue;
 }
 
+#buttons-div {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+}
+
+.game-button {
+    background-color: gainsboro;
+    padding: 12px 26px;
+}
+
 #back-drop {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
@@ -83,16 +94,27 @@ button:hover {
     color: darkblue;
 }
 
+.rules-p {
+    text-align: center;
+    font-size: x-large;
+    color: tomato;
+    margin-top: 40px;
+}
+
 .radio-label{
   font-size: medium;
   color: maroon;
 }
 
+#rules {
+    display: block;
+    color: darkslateblue;
+    font-size: medium;
+    text-align: left;
+}
+
 .dialog {
-    position: absolute;
     background-color: lightgray;
-    top: 20%;
-    left: 40%;
     border: 1px solid black;
     border-radius: 0.25rem;
     display: flex;
@@ -100,11 +122,48 @@ button:hover {
     justify-content: space-between;
     align-items: center;
     z-index: 10;
+    text-align: center;
+    padding: 16px;
     width: 20%;
+    margin: auto;
+    margin-top: 48px;
+    margin-bottom: 48px;
     min-height: 300px;
     font-size: x-large;
     font-weight: bold;
-    color: sandybrown;
+    color: maroon;
+}
+
+.settings-div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-top: 8px;
+}
+
+hr {
+    margin-bottom: 0px;
+}
+
+#rules-dialog {
+    width: 30%;
+}
+
+#leave-dialog {
+    min-height: 64px;
+    font-size: larger;
+    display: block;
+}
+
+.leave-button {
+    padding: 8px;
+    margin-top: 8px;
+}
+
+#error-message {
+    color:red;
+    font-size: x-small;
+    text-align: center;
 }
 
 #game-area {
@@ -159,13 +218,19 @@ button:hover {
     padding: 12px;
 }
 
+#settings-form {
+    margin-bottom: 16px;
+    margin-top: 16px;
+    text-align: center;
+}
+
 .bank {
     height: 192px;
     width: 84px;
     margin: 8px 12px;
     border-radius: 44%; /* alterar se tamanho mudar */
     background-color: sandybrown;
-    border: 4px inset black
+    border: 4px inset gainsboro
 }
 
 .house {
@@ -177,7 +242,7 @@ button:hover {
     height: 84px;
     border-radius: 30%;
     background-color: sandybrown;
-    border: 4px inset black;
+    border: 4px inset gainsboro;
     box-shadow: inset 5px 5px rgba(0,0,0,0.3);
 }
 
@@ -191,11 +256,23 @@ button:hover {
     pointer-events: none;
 }
 
-#rules-dialog {
-    text-align: center;
+#name-display {
+    color: sandybrown;
+    font-size: larger;
 }
 
-.dialogForm {
+#name-area {
+    display: flex;
+    flex-direction: column;
+}
+
+#sign-out {
+    color: white;
+    align-self: flex-end;
+    font-size: small;
+}
+
+.dialog-form {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -206,8 +283,9 @@ button:hover {
     margin-bottom: 4px;
 }
 
-.authSubmit {
+.auth-submit {
     margin-top: 12px;
+    padding: 8px;
 }
 
 .form-label {
@@ -223,6 +301,10 @@ button:hover {
 .clickable:hover {
     cursor: pointer;
     border-color: blue;
+}
+
+input[type=submit] {
+    cursor: pointer;
 }
 
 .hidden {

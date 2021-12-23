@@ -17,22 +17,36 @@ class Bot
 
     play(state)
     {
-        return (this.difficulty == 0 ? this.easy(state) : (this.difficulty == 1 ? this.medium(state) : this.hard(state)));
+        return (this.difficulty == "Easy" ? this.easy(state) : (this.difficulty == "Medium" ? this.medium(state) : this.hard(state)));
     }
 
     easy(state)
     {
-        return Math.floor(Math.random() * ((state.length / 2) - 1)) + 1;
+        let r;
+
+        while (state[(r = Math.floor(Math.random() * ((state.length / 2) - 1)) + 1)] === 0);
+
+        return r;
     }
 
     medium(state)
     {
-        // Calcular best-first (last lands on bank state[pos] = state.length - pos) > (maximize)
+        // Placholder
+        let r;
+
+        while (state[(r = Math.floor(Math.random() * ((state.length / 2) - 1)) + 1)] === 0);
+
+        return r;
     }
 
-    hard()
+    hard(state)
     {
         // negamax com alpha beta prune
+        let r;
+
+        while (state[(r = Math.floor(Math.random() * ((state.length / 2) - 1)) + 1)] === 0);
+
+        return r;
     }
 }
 

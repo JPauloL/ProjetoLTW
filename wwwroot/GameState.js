@@ -3,8 +3,15 @@ class GameState
     state;
     player;
 
-    constructor(size, numSeeds, player)
+    constructor(size, numSeeds, player, state)
     {
+        if (state !== undefined)
+        {
+            this.state = state;
+            this.player = player;
+            return;
+        }
+
         this.state = Array(2 * (size + 1)).fill(1).map((_, i, arr) => i % (arr.length / 2) == 0 ? 0 : numSeeds);
         this.player = player;
     }
@@ -19,6 +26,7 @@ class GameState
         return this.state.length;
     }
 
+    // Testar e alterar se for necesário
     getState()
     {
         // console.log(this.state.slice(this.state.length / 2).concat(this.state.slice(0, this.state.length / 2)));
@@ -54,6 +62,8 @@ class GameState
 
     getGameScore()
     {
+        if (this.isFinal()) this.finishGame();
+        console.log(this.state);
         return this.state[this.getBank(true)] - this.state[this.getBank(false)];
     }
 
@@ -112,18 +122,13 @@ class GameState
         const lastPos = (pos + n) % len;
         if (lastPos != playersBank)
         {
-            if (this.state[lastPos] === 1 && this.state[this.state.length - lastPos] > 0 && this.isPlayerSide(lastPos))
+            if (this.state[lastPos] === 1 && this.isPlayerSide(lastPos))// && this.state[this.state.length - lastPos] > 0)
             {
                 this.state[playersBank] += this.state[lastPos] + this.state[this.state.length - lastPos];
                 this.state[lastPos] = this.state[this.state.length - lastPos] = 0;
             }
 
             this.player = !this.player;
-        }
-
-        if (this.isFinal()) 
-        {
-            this.finishGame();
         }
 
         return 0;

@@ -1,0 +1,190 @@
+class Game
+{
+    playerOne;
+    playerTwo;
+    bot;
+    gameBoard;
+    scoreboard;
+    message;
+    state;
+    winner;
+    isPlaying;
+    requestHandler;
+
+    constructor(playerOne, playerTwo, size, seeds, player, bot, requestHandler)
+    {    
+        this.playerOne = playerOne;
+        this.playerTwo = playerTwo;
+        this.isPlaying = false;
+        this.bot = bot;
+        this.requestHandler = requestHandler;
+        this.state = new GameState(size, seeds, player);
+        this.scoreboard = new Scoreboard(playerOne, playerTwo); 
+        this.message = new Message((this.state.player ? playerOne : playerTwo) + "'s turn");
+        this.gameBoard = new GameBoard(size, seeds, this);
+        const buttonsDiv = this.createButtonsDiv();
+
+        const gameArea = document.getElementById("game-area");
+        gameArea.innerHTML = "";
+
+        gameArea.appendChild(this.scoreboard.render());
+        gameArea.appendChild(this.message.render());
+        gameArea.appendChild(this.gameBoard.render());
+        gameArea.appendChild(buttonsDiv);
+
+        document.getElementById("initial-page").classList.add("hidden");
+        document.getElementById("game-area").classList.remove("hidden");
+
+        this.gameBoard.displaySeeds();
+
+        if (this.state.player) 
+        {
+            this.gameBoard.setClickableHouses(true);
+        }
+        else if (this.requestHandler === undefined)
+        {
+            setTimeout(() => this.opponentPlay(this.bot.play(this.state.getState())), 1000);
+        }
+
+    }
+
+    createButtonsDiv()
+    {
+        const buttonsDiv = document.createElement("div");
+        buttonsDiv.id = "buttons-div";
+
+        const rules = document.createElement("button");
+        rules.classList.add("game-button");
+        rules.innerText = "Rules";
+        setDialogEvent(rules, rulesDialog);
+
+        const ranking = document.createElement("button");
+        ranking.classList.add("game-button");
+        ranking.innerText = "Ranking";
+        setDialogEvent(ranking, rankingDialog);
+
+        const giveUp = document.createElement("button");
+        giveUp.id = "give-up-button";
+        giveUp.classList.add("game-button");
+        giveUp.innerText = "Give Up";
+        setDialogEvent(giveUp, leaveDialog);
+
+        buttonsDiv.appendChild(rules);
+        buttonsDiv.appendChild(ranking);
+        buttonsDiv.appendChild(giveUp);
+
+        leaveConfirm.addEventListener("click", 
+                                                () => {
+                                                    if (this.requestHandler !== undefined)
+                                                    {
+                                                        requestHandler.leave();
+                                                    }
+                                                    else if (this.winner == undefined)
+                                                    {
+                                                        this.winner = false;
+                                                        this.finish();
+                                                    }
+        });
+
+        return buttonsDiv;
+    }
+
+    setState(state, player)
+    {
+        this.state = new GameState(0, 0, player, state);
+    }
+
+    finish()
+    {
+        this.player = true;
+        this.gameBoard.setClickableHouses(false);
+
+        const buttonsDiv = document.getElementById("buttons-div");
+        buttonsDiv.removeChild(document.getElementById("give-up-button"));
+        startButton.classList.remove("initial-button");
+        startButton.classList.add("game-button");
+        startButton.innerText = "Play again";
+        buttonsDiv.appendChild(startButton);
+
+        this.updateGameMessage(...(this.winner === null ? ["It's a draw!", "gray"] : 
+                                  (this.winner ? (this.state.isFinal() ? ["You win! Well played", "green"] : ["You win! Your opponent gave up", "green"]) : 
+                                  (this.state.isFinal() ? ["You lose! Better luck next time", "red"] : ["You lose! You gave up", "red"]))));
+        this.gameBoard.finishGame(this.state.getBank(true), this.state.getBank(false));
+        this.updateScoreboard();
+    }
+
+    selfPlay(pos)
+    {
+        console.log("Play: " + pos);
+        
+        if (this.isPlaying || !this.state.getPlayer() || this.winner !== undefined) return -1;
+
+        if (this.requestHandler === undefined) 
+        {
+            if (this.state.play(pos) < 0) return -1;
+            this.play(pos, this.state.getPlayer());
+        }
+        else
+        {
+            this.requestHandler.notify(pos);
+        }
+        
+        return 0;
+    }
+
+    opponentPlay(pos)
+    {
+        console.log("Play: " + pos);
+        
+        if (this.isPlaying || this.state.getPlayer() || this.state.play(pos) < 0 || this.winner !== undefined) return -1;
+     
+        this.play((this.state.getSize() / 2) + pos, this.state.getPlayer());
+        
+        return 0;
+    }
+
+    play(pos, player)
+    {
+        if (pos < 0) 
+        {
+            if (player) this.gameBoard.setClickableHouses(true);
+            return;
+        }
+        
+        this.isPlaying = true;
+        this.gameBoard.play(pos);
+        this.updateScoreboard();
+        
+        if (this.state.isFinal() && (this.requestHandler === undefined || this.requestHandler === null))
+        {
+            const score = this.state.getGameScore();
+            this.winner = score === 0 ? null : score > 0;
+            this.finish();
+            return;
+        }
+        
+        this.isPlaying = false;
+
+        if (player)
+        {
+            this.gameBoard.setClickableHouses(true);
+        }
+    
+        if (this.bot !== null && !player)
+        {
+            setTimeout(() => this.opponentPlay(this.bot.play(this.state.getState())), 1000);
+        }
+    
+        this.updateGameMessage((player ? this.playerOne : this.playerTwo) + "'s turn")
+    }
+
+    updateScoreboard()
+    {
+        this.scoreboard.update(this.state.getPlayerScore(true), this.state.getPlayerScore(false));
+    }
+
+    updateGameMessage(message, color)
+    {
+        this.message.update(message, color);
+    }
+}
