@@ -1,3 +1,4 @@
+const url = require("url");
 const User = require("./wwwroot/User.js");
 const GameState = require("./wwwroot/GameState.js");
 const FileManager = require("./FileManager.js");
@@ -9,10 +10,13 @@ const seconds = 120;// play time in seconds
 
 const playTime = seconds * 1000; // play time in milliseconds 
 
-function endGame(game, winner)
+function endGame(game, winner, playerOne, playerTwo)
 {
-    updater.update(game, { winner: winner });
-    ranking.update(playerOne, playerTwo, winner);
+    if (playerOne != null)
+    {
+        ranking.update(playerOne, playerTwo, winner);
+    }
+
     FileManager.deleteGame(game);
 }
 
@@ -37,7 +41,7 @@ module.exports.registerForUpdates = (request, response) =>
             updater.update(query.game, { board: board })
         }
     })
-    .catch()
+    .catch();
 }
 
 module.exports.join = (request, response) =>
@@ -61,13 +65,17 @@ module.exports.join = (request, response) =>
             .then(() => {
                 FileManager.registerForGame(user, size, initial)
                 .then(({ game }) => {
-                    if (game.lastPlay != undefined)
+                    if (game.lastPlay !== undefined)
                     {
                         setTimeout(() => {
-                            FileManager.getGame(gameId)
+                            FileManager.getGame(game.id)
                             .then((g) => {
                                 if (game.lastPlay === g.lastPlay) 
-                                    endGame(gameId, playerOne === g.board.turn ? playerTwo : playerOne);
+                                {
+                                    const [playerOne, playerTwo] = Object.keys(g.board.sides);
+                                    endGame(game.id, playerOne === g.board.turn ? playerTwo : playerOne, playerOne, playerTwo);
+                                    updater.update(data.gmae, { winner: playerOne === g.board.turn ? playerTwo : playerOne });
+                                }
                             })
                             .catch(console.log);
                         }, playTime);
@@ -130,14 +138,15 @@ module.exports.notify = (request, response) =>
                         {
                             const score = gameState.getGameScore();
                             res.winner = (score > 0 ? playerOne : (score < 0 ? playerTwo : null));
-                            FileManager.deleteGame(gameId);
+                            endGame(gameId, res.winner, playerOne, playerTwo);
                         }
                         
                         setTimeout(() => {
                             FileManager.getGame(gameId)
                             .then((g) => {
                                 if (game.lastPlay === g.lastPlay) 
-                                    endGame(gameId, playerOne === g.board.turn ? playerTwo : playerOne);
+                                    endGame(gameId, playerOne === g.board.turn ? playerTwo : playerOne, playerOne, playerTwo);
+                                    updater.update(data.gmae, { winner: playerOne === g.board.turn ? playerTwo : playerOne });
                             })
                             .catch(console.log);
                         }, playTime);
@@ -175,9 +184,10 @@ module.exports.leave = (request, response) =>
                 FileManager.getGame(data.game)
                 .then(({ board }) => {
                     const players = Object.keys(board.sides);
-                    
+
                     const winner = players.length == 1 ? null : (players[0] === data.nick ? players[1] : players[0]);
-                    endGame(data.game, winner);
+                    endGame(data.game, winner, players[0], players[1]);
+                    updater.update(data.game, { winner: winner });
 
                     responses.okResponse(response);
                 })

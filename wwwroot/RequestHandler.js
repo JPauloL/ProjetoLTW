@@ -124,7 +124,6 @@ class RequestHandler
         this.gameId = null;    
         this.eventSource.close();
         submitButton.value = "Start game";
-        console.log("HERE");
 
         if (this.game != null && this.game.winner == undefined)
         {

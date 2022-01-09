@@ -73,7 +73,6 @@ class GameState
     getGameScore()
     {
         if (this.isFinal()) this.finishGame();
-        console.log(this.state);
         return this.state[this.getBank(true)] - this.state[this.getBank(false)];
     }
 

@@ -83,7 +83,7 @@ module.exports = class FileManager
                     }
                     games[gameId].lastPlay = Date.now();
 
-                    fs.writeFile("games.json", JSON.stringify(games), (e) => e ? reject() : resolve({ game: { id: gameId, board: games[gameId].board }, joined: true }));
+                    fs.writeFile("games.json", JSON.stringify(games), (e) => e ? reject() : resolve({ game: { id: gameId, board: games[gameId].board } }));
 
                     return;
                 }
@@ -91,7 +91,7 @@ module.exports = class FileManager
                 gameId = crypto.createHash("sha256").update(user.nick + (new Date().getTime().toString())).digest("hex");
                 games[gameId] = this.buildGameObject(user.nick, size, seeds);
 
-                fs.writeFile("games.json", JSON.stringify(games), (e) => e ? reject() : resolve({ game: { id: gameId, board: games[gameId].board }, joined: false }));
+                fs.writeFile("games.json", JSON.stringify(games), (e) => e ? reject() : resolve({ game: { id: gameId, board: games[gameId].board } }));
             });
         });
     }
@@ -165,5 +165,71 @@ module.exports = class FileManager
                 fs.writeFile("games.json", JSON.stringify(games), () => {});
             } 
         })
+    }
+
+    static updateRankings(playerOne, playerTwo, winner)
+    {
+        fs.readFile("rankings.json", (e, rankingsData) => {
+            if (e)
+            {
+                return;
+            }
+            const rankings = JSON.parse(rankingsData);
+    
+            if (rankings.ranking == undefined)
+            {
+                rankings.ranking = [];
+            }
+    
+            const ranking = rankings.ranking;
+    
+            let p1;
+            let p2;
+    
+            if ((p1 = ranking.findIndex((r) => r.nick === playerOne)) == -1)
+            {
+                p1 = ranking.push({ 
+                    nick: playerOne,
+                    games: 0,
+                    wins: 0
+                }) - 1;
+            }
+    
+            if ((p2 = ranking.findIndex((r) => r.nick === playerTwo)) == -1)
+            {
+                p2 = ranking.push({ 
+                    nick: playerTwo,
+                    games: 0,
+                    wins: 0
+                }) - 1;
+            }
+            
+            ranking[p1].games++;
+            ranking[p2].games++;
+    
+            if (winner !== null)
+            {
+                ranking[winner === playerOne ? p1 : p2].wins++;
+            }
+    
+            ranking.sort((p1, p2) => {
+                const cmp = p2.wins - p1.wins;
+    
+                if (cmp)
+                {
+                    return cmp;
+                }
+    
+                return p1.games - p2.games;
+            });
+    
+            rankings.ranking = ranking;
+    
+            // console.log(ranking);
+    
+            fs.writeFile("rankings.json", JSON.stringify(rankings), (e) => {
+                if (e) console.log(e);
+            });
+        });
     }
 }

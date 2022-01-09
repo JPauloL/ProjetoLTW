@@ -18,11 +18,14 @@ const leaveCancel = document.getElementById("button-cancel");
 const leaveConfirm = document.getElementById("button-confirm");
 const submitButton = document.getElementById("start-submit");
 
-// My server
+// My debug server
 const url = "http://localhost:8008/";
 
+// My final server
+// const url = "http://twserver.alunos.dcc.fc.up.pt:8930/";
+
 // LTW Server
-// const url = "http://twserver.alunos.dcc.fc.up.pt:8008/"
+// const url = "http://twserver.alunos.dcc.fc.up.pt:8008/";
 
 function my_fetch(url, init)
 {

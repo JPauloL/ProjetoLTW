@@ -1,14 +1,18 @@
-module.exports.plainHeader = {
+const plainHeader = {
     'Access-Control-Allow-Origin': '*' 
     // "Access-Control-Allow-Methods": "POST" 
 };
 
-module.exports.SSEHeader = {    
+const SSEHeader = {    
     'Access-Control-Allow-Origin': '*',
     'Cache-Control': 'no-cache',
     'Connection': 'keep-alive',
     'Content-Type': 'text/event-stream'
 };
+
+module.exports.plainHeader = plainHeader;
+
+module.exports.SSEHeader = SSEHeader;
 
 // Outros erros
 module.exports.InternalErrorResponse = (response, message) =>
