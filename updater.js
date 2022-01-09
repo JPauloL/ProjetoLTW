@@ -1,5 +1,3 @@
-const url = require("url");
-
 let clients = [];
 
 module.exports.remember = (game, response) => {

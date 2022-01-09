@@ -83,15 +83,6 @@ module.exports = class FileManager
                     }
                     games[gameId].lastPlay = Date.now();
 
-                    setTimeout(() => {
-                        FileManager.getGame(gameId)
-                        .then((g) => {
-                            if (game.lastPlay === g.lastPlay) 
-                                endGame(gameId, playerOne === g.board.turn ? playerTwo : playerOne);
-                        })
-                        .catch(console.log);
-                    }, playTime);
-
                     fs.writeFile("games.json", JSON.stringify(games), (e) => e ? reject() : resolve({ game: { id: gameId, board: games[gameId].board }, joined: true }));
 
                     return;
