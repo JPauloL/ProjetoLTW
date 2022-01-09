@@ -18,7 +18,77 @@ const leaveCancel = document.getElementById("button-cancel");
 const leaveConfirm = document.getElementById("button-confirm");
 const submitButton = document.getElementById("start-submit");
 
-const url = "http://twserver.alunos.dcc.fc.up.pt:8008/"//"http://localhost:8008/";
+// My server
+const url = "http://localhost:8008/";
+
+// LTW Server
+// const url = "http://twserver.alunos.dcc.fc.up.pt:8008/"
+
+function my_fetch(url, init)
+{
+    const method = init.method ?? 'GET';
+    const body = init.body ?? JSON.stringify({});
+
+    const xhr = new XMLHttpRequest();
+
+    if (init.header != null)
+    {
+        xhr.setRequestHeader(init.header)
+    }
+
+    xhr.open(method, url)
+
+    let p = new Promise((resolve, reject) => {
+        xhr.onreadystatechange = () => {
+            if(xhr.readyState == 4) 
+            {
+                const response = {
+                    status: xhr.status,
+                    headers: xhr.getAllResponseHeaders(),
+                    response: xhr.responseText,
+                    statusText: xhr.statusText,
+
+                    json: () => {
+                        const r = xhr.responseText;
+                        
+                        return new Promise((resolve, reject) => {
+                        
+                            try 
+                            {
+                                const j = JSON.parse(r);
+                                resolve(j);
+                            }
+                            catch (e)
+                            {
+                                reject(e);
+                            }
+                        })
+                    }
+                }
+                
+                if (xhr.status == 200)
+                {
+                    resolve(response);
+                }
+                else
+                {
+                    reject(response);
+                }
+            }
+        } 
+    });
+
+    xhr.send(body);
+    return p;
+}
+
+// my_fetch(url + "ranking", {
+//     method: "POST",
+//     body: JSON.stringify({})
+// })
+// .then((r) => r.json())
+// .then(console.log)
+// .catch(console.log);
 
 const requestHandler = new RequestHandler();
 let user = null;
@@ -70,7 +140,7 @@ signInForm.addEventListener("submit", e => {
     
     const params = props.reduce((p, c) => ({...p, [c]: data.get(c)}), {});
     
-    fetch("http://twserver.alunos.dcc.fc.up.pt:8008/register", {  // http://localhost:8008/register
+    my_fetch(url + "register", {
         method: "POST",
         body: JSON.stringify(params)
     })
@@ -165,8 +235,3 @@ settingsForm.addEventListener("submit", e => {
 
     }
 });
-// const data = {id: 1, user: {name: user.name, password: user.password}, pos: 3};
-// fetch("http://localhost:8008/notify", {
-//     method: "POST",
-//     body: JSON.stringify(data)
-// });

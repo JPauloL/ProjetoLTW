@@ -1,32 +1,128 @@
 const http = require("http");
 const url = require("url");
 const fs = require("fs");
-const crypto = require("crypto");
+const FileManager = require("./FileManager.js");
+const updater = require("./updater.js");
 const GameState = require("./wwwroot/GameState.js");
-const { join } = require("path");
+const User = require("./wwwroot/User.js");
+// const { join } = require("path");
 
-const header = {
+// Debug
+const port = 8008;
+
+// Final 
+// const port = 9030;
+
+const postHeader = {
     'Access-Control-Allow-Origin': '*' 
     // "Access-Control-Allow-Methods": "POST" 
 };
 
+const SSEHeader = {    
+    'Access-Control-Allow-Origin': '*',
+    'Cache-Control': 'no-cache',
+    'Connection': 'keep-alive',
+    'Content-Type': 'text/event-stream'
+};
+
+// Outros erros
 function InternalErrorResponse(response, message)
 {
-    response.writeHead(500, header);
+    response.writeHead(500, postHeader);
     response.end(JSON.stringify({error: message}));
 }
 
+// Recurso não encontrado
+function notFoundErrorResponse(response, message)
+{
+    response.writeHead(404, postHeader);
+    response.end(JSON.stringify({error: message}));
+}
+
+// Pedido não autorizado
 function unauthorizedErrorResponse(response, message)
 {
-    response.writeHead(401, header);
+    response.writeHead(401, postHeader);
     response.end(JSON.stringify({error: message}));
 }
 
-function okResponse(response)
+// Validação de argumentos
+function validateRequestErrorResponse(response, message)
 {
-    response.writeHead(200, header);
-    response.end();
+    response.writeHead(400, postHeader);
+    response.end(JSON.stringify({error: message}))
 }
+
+// Pedido bem sucedido
+function okResponse(response, message)
+{
+    const m = message ?? {};
+
+    response.writeHead(200, postHeader);
+    response.end(JSON.stringify(m));
+}
+
+function leave(request, response)
+{
+    let body = "";
+
+    request
+    .on("data", (data) => body += data)
+    .on("end", () => {
+        try 
+        {
+            let data = JSON.parse(body);
+            
+            FileManager.getUser(new User(data.nick, data.password))
+            .then(() => {
+                FileManager.getGame(data.game)
+                .then(({ board }) => {
+                    const players = Object.keys(board.sides);
+                    
+                    const winner = players.length == 1 ? null : (players[0] === data.nick ? players[1] : players[0]);
+
+                    updater.update(data.game, { winner: winner });
+                    FileManager.deleteGame(data.game);
+                    okResponse(response);
+                    
+                })
+                .catch((e) => e == undefined ? 
+                unauthorizedErrorResponse(response, "User isn't authenticated.") :
+                validateRequestErrorResponse(response, "Game doesn't exist"));
+            });
+        }
+        catch (e)
+        {
+            console.log(e);
+            InternalErrorResponse(response);
+        }
+    });
+}
+
+function registerForUpdates(request, response)
+{
+    const query = url.parse(request.url, true).query;
+    const game = query.game;
+
+    updater.remember(game, response);
+
+    request
+    .on("close", () => {
+        updater.forget(response)
+    });
+
+    response.writeHead(200, SSEHeader);
+
+    FileManager.getGame(game)
+    .then(({ board }) => {
+        if (Object.keys(board.sides).length === 2)
+        {
+            updater.update(query.game, { board: board })
+        }
+    })
+    .catch()
+ }
+
 
 function updateRankings(playerOne, playerTwo, winner)
 {
@@ -50,6 +146,13 @@ function updateRankings(playerOne, playerTwo, winner)
     });
 }
 
+function ranking(request, response)
+{
+    FileManager.getRanking()
+    .then((rank) => okResponse(response, { ranking: rank }))
+    .catch(InternalErrorResponse(response, "Couldn't get rankings."));
+}
+
 function register(request, response)
 {
     if (request.method !== "POST") return;
@@ -62,50 +165,18 @@ function register(request, response)
         .on("end", () => {
             try 
             {
-                user = JSON.parse(body);
-
-                if (user.name == null || user.password == null || user.name == "" || user.password == "")
+                const { nick, password } = JSON.parse(body);
+                user = new User(nick, password);
+                
+                if (user.nick == null || user.password == null || user.nick == "" || user.nick.length > 20 || user.password == "")
                 {
-                    InternalErrorResponse(response);
+                    validateRequestErrorResponse(response, "Wrong nick/password.");
                 }
 
-                user.password = crypto.createHash("sha256").update(user.password).digest("hex");
-
-                fs.readFile("credentials.json", (e, data) => {
-                    if (e) 
-                    {
-                        InternalErrorResponse(response);
-                        return;
-                    }
-
-                    const users = JSON.parse(data);
-
-                    if (users[user.name] !== undefined)
-                    {
-                        if (users[user.name] === user.password)
-                        {
-                            okResponse(response);
-                        }
-                        else
-                        {
-                            unauthorizedErrorResponse(response);
-                        }
-                        return;
-                    }
-                    else
-                    {
-                        users[user.name] = user.password;
-                        fs.writeFile("credentials.json", JSON.stringify(users), (e) => {
-                            if (e) 
-                            {
-                                InternalErrorResponse(response);
-                                return;
-                            }
-            
-                            okResponse(response);
-                        })
-                    }
-                });
+                FileManager.getUser(user)
+                .then(() => okResponse(response))
+                .catch(console.log)
+                .catch(() => unauthorizedErrorResponse(response));
             }
             catch (e)
             {
@@ -113,6 +184,42 @@ function register(request, response)
                 InternalErrorResponse(response);
             }
         });
+}
+
+function join (request, response)
+{
+    let body = "";
+
+    request
+    .on("data", (data) => body += data)
+    .on("end", () => {
+        try 
+        {
+            const { nick, password, size, initial } = JSON.parse(body);
+            const user = new User(nick, password);
+
+            if (size < 1 || size > 9 || initial < 1 || initial > 6)
+            {
+                validateRequestErrorResponse(response, "Invalid arguments.")
+            }
+
+            FileManager.getUser(user)
+            .then(() => {
+                FileManager.registerForGame(user, size, initial)
+                .then(({ game }) => {
+                    okResponse(response, { game: game.id });
+                })
+                .catch(() => InternalErrorResponse(response));
+            })
+            .catch(() => unauthorizedErrorResponse(response));
+            
+        }
+        catch (e)
+        {
+            console.log(e);             
+            InternalErrorResponse(response);
+        }
+    });
 }
 
 function notify(request, response)
@@ -125,68 +232,49 @@ function notify(request, response)
         try 
         {
             let play = JSON.parse(body);
-            const [id, user, pos] = [play.id, play.user, play.pos];
+            const [gameId, nick, password, pos] = [play.game, play.nick, play.password, play.move + 1];
 
-            user.password = crypto.createHash("sha256").update(user.password).digest("hex");
+            const user = new User(nick, password);
 
-            fs.readFile("credentials.json", (e, data) => {
-                if (e) 
-                {
-                    InternalErrorResponse(response);
-                    return;
-                }
+            FileManager.getUser(user)
+            .then(() => {
+                FileManager.getGame(gameId)
+                .then((game) => {
+                    if (user.nick !== game.board.turn)
+                    {
+                        validateRequestErrorResponse(response, "Not your turn to play.");
+                        return;
+                    }
+                    const [playerOne, playerTwo] = Object.keys(game.board.sides);
+                    const gameState = new GameState(null, null, game.board.turn === playerOne, GameState.buildState(game.board.sides[playerOne], game.board.sides[playerTwo]));
 
-                const users = JSON.parse(data);
+                    if (gameState.play(pos) < 0 )
+                    {
+                        validateRequestErrorResponse(response, "Invalid move.");
+                        return;
+                    }
+                    
 
-                if (users[user.name] !== undefined && users[user.name] === user.password)
-                {     
-                    fs.readFile("games.json", (e, data) => {
-                        if (e) 
-                        {
-                            InternalErrorResponse(response);
-                            return;    
-                        }
-
-                        const gamesData = JSON.parse(data);
-                        const stateData = gamesData[id];
-
-                        const gameState = new GameState(_, _, stateData.player, stateData.state);
+                    FileManager.saveGame(gameId, game, gameState, playerOne, playerTwo)
+                    .then((savedGame) => {
                         
-                        if ((gameState.player && (user.name === stateData.playerOne)) || (!gameState.player && (user.name === stateData.playerTwo)))
+                        let res = { board: savedGame.board }
+
+                        if (gameState.isFinal())
                         {
-                            gameState.play(pos);
-                            console.log(gameState.state);
-                            [gamesData[id].state, gamesData.player] = [gameState.state, gameState.player];
-
-                            fs.writeFile("games.json", JSON.stringify(gamesData), (e) => {
-                                if(e) 
-                                {
-                                    InternalErrorResponse(response)
-                                    return;
-                                } 
-                                
-                                if (gameState.isFinal())
-                                {
-                                    const score = this.state.getScore();
-                                    const [winner, loser] = score > 0 ? true : (score < 0 ? false : null)
-
-                                    updateRankings(playerOne, playerTwo, winner);
-                                }
-
-                                okResponse(response);
-                            });
+                            const score = gameState.getGameScore();
+                            res.winner = (score > 0 ? playerOne : (score < 0 ? playerTwo : null));
+                            FileManager.deleteGame(gameId);
                         }
-                        else
-                        {
-                            InternalErrorResponse(response)
-                        }
-                    });
-                }
-                else
-                {        
-                    unauthorizedErrorResponse(response)
-                }
-            });
+                        
+                        okResponse(response);
+                        updater.update(gameId, res);
+                    })
+                    .catch(() => InternalErrorResponse(response));
+                })
+                .catch(validateRequestErrorResponse(response, "Game doesn't exist."));
+            })
+            .catch(() => unauthorizedErrorResponse(response, "Unauthenticated."));
         }
         catch (e)
         {               
@@ -196,46 +284,10 @@ function notify(request, response)
     });
 }
 
-function leave(request, response)
-{
-    let body = "";
-
-    request
-    .on("data", (data) => body += data)
-    .on("end", () => {
-        try 
-        {
-            let play = JSON.parse(body);
-            const [id, user, pos] = [play.id, play.user, play.pos];
-
-            user.password = crypto.createHash("sha256").update(user.password).digest("hex");
-
-            fs.readFile("credentials.json", (e, data) => {
-                if (e) 
-                {
-                    InternalErrorResponse(response);
-                    return;
-                }
-
-                const users = JSON.parse(data);
-
-                if (users[user.name] !== undefined && users[user.name] === user.password)
-                {
-                    // user is defeated
-                }
-            });
-        }
-        catch (e)
-        {
-            console.log(e);
-            InternalErrorResponse(response);
-        }
-    });
-}
 
 function processPath(path, request, response)
 {
-    const filePath = join("wwwroot", path === "/" ? "index.html" : path);
+    const filePath =  "wwwroot" + (path === "/" ? "index.html" : path); //join("wwwroot", path === "/" ? "index.html" : path);
     if (fs.existsSync(filePath))
     {
         console.log(filePath);
@@ -246,22 +298,25 @@ function processPath(path, request, response)
     switch (path)
     {
         case "/join":
-            join(request, response);
-            break;
+        join(request, response);
+        break;
         case "/leave":
-            leave(request, response);
-            break;
+        leave(request, response);
+        break;
         case "/notify":
-            notify(request, response);
-            break;
+        notify(request, response);
+        break;
         case "/ranking":
-            ranking(response);
-            break;
+        ranking(request, response);
+        break;
         case "/register":
-            register(request, response);
-            break;
+        register(request, response);
+        break;
+        case "/update":
+        registerForUpdates(request, response);
+        break;
         default:
-            response.writeHead(501, header);
+            response.writeHead(404, postHeader);
             response.end();
     }
 }
@@ -272,4 +327,4 @@ http.createServer((request, response) => {
 
     processPath(path, request, response);
 
-}).listen(8008);
+}).listen(port);

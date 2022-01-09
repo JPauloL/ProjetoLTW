@@ -16,6 +16,11 @@ class GameState
         this.player = player;
     }
 
+    static buildState(playerOne, playerTwo)
+    {
+        return [playerTwo.store].concat(playerOne.pits).concat(playerOne.store).concat(playerTwo.pits);
+    }
+
     getPlayer()
     {
         return this.player;
@@ -31,6 +36,11 @@ class GameState
     {
         // console.log(this.state.slice(this.state.length / 2).concat(this.state.slice(0, this.state.length / 2)));
         return this.player ? this.state : this.state.slice(this.state.length / 2).concat(this.state.slice(0, this.state.length / 2)); // Trocar os lados 
+    }
+
+    getPits(player) 
+    { 
+        return player ? this.state.slice(1, (this.state.length / 2)) : this.state.slice((this.state.length / 2) + 1, this.state.length);
     }
 
     getBank(player) 
@@ -142,11 +152,4 @@ class GameState
     }
 }
 
-// module.exports = GameState; // Apagar
-
-// let game = new GameState(6, 4);
-// console.log(game.toString());
-// console.log("\n" + game.sow(3) + " " + game.player + "\n");
-// console.log(game.toString());
-// console.log("\n" + game.sow(4) + " " + game.player + "\n");
-// console.log(game.toString());
+module.exports = GameState;

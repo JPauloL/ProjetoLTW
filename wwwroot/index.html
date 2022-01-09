@@ -29,7 +29,7 @@
                     <span id="name-display">
                         
                     </span>
-                    <a id="sign-out">
+                    <a href="#" id="sign-out">
                         Sign out
                     </a>
                 </span>
@@ -84,93 +84,94 @@
                 <img src="logo.svg" alt="logo" height=64 width=64>
             </div>
 
-        <div id="settings-dialog" class="dialog hidden">
-            Game settings
-            <form id="settings-form" class="dialog-form">
-                <div class="settings-div">
-                    <label class="form-label" for="house-select">Number of houses:</label>
-                    <select id="house-select" name="house-select">
-                        <!-- <option>10</option> -->
-                        <option>9</option>
-                        <option>8</option>
-                        <option>7</option>
-                        <option selected>6</option>
-                        <option>5</option>
-                        <option>4</option>
-                        <option>3</option>
-                        <option>2</option>
-                        <option>1</option>
-                    </select>
-                </div>
-
-                <div class="settings-div">
-                    <label class="form-label" for="seeds-select">Number of seeds:</label>
-                    <select id="seeds-select" name="seeds-select">
-                        <option>6</option>
-                        <option>5</option>
-                        <option selected>4</option>
-                        <option>3</option>
-                        <option>2</option>
-                        <option>1</option>
-                    </select>
-                </div>
-
-                
-                <div>
-                    <hr>
+            <div id="settings-dialog" class="dialog hidden">
+                Game settings
+                <form id="settings-form" class="dialog-form">
                     <div class="settings-div">
-                        <label class="form-label">Opponent:</label>
+                        <label class="form-label" for="house-select">Number of houses:</label>
+                        <select id="house-select" name="house-select">
+                            <!-- <option>10</option> -->
+                            <option>9</option>
+                            <option>8</option>
+                            <option>7</option>
+                            <option selected>6</option>
+                            <option>5</option>
+                            <option>4</option>
+                            <option>3</option>
+                            <option>2</option>
+                            <option>1</option>
+                        </select>
+                    </div>
+
+                    <div class="settings-div">
+                        <label class="form-label" for="seeds-select">Number of seeds:</label>
+                        <select id="seeds-select" name="seeds-select">
+                            <option>6</option>
+                            <option>5</option>
+                            <option selected>4</option>
+                            <option>3</option>
+                            <option>2</option>
+                            <option>1</option>
+                        </select>
+                    </div>
+
+                    
+                    <div>
+                        <hr>
+                        <div class="settings-div">
+                            <label class="form-label">Opponent:</label>
+                            <span>
+                                <input type="radio" id="bot" name="oppo-select" value="bot"  checked>
+                                <label for="bot" class="radio-label" >Bot</label>
+                                <input type="radio" id="human" name="oppo-select" value="human">
+                                <label for="human" class="radio-label">Human</label>
+                            </span>
+                        </div>
+                        <hr>
+                    </div>
+                    <!-- AI settings -->
+                    <div class="settings-div">
+                    <label class="form-label" for="difficulty-select">Difficulty:</label>
+                    <select id="difficulty-select" name="difficulty-select">
+                        <option selected>Easy</option>
+                        <option>Medium</option>
+                        <option>Hard</option>
+                    </select>
+                    </div>
+                    <div class="settings-div">
+                        <label class="form-label">Side:</label>
                         <span>
-                            <input type="radio" id="bot" name="oppo-select" value="bot"  checked>
-                            <label for="bot" class="radio-label" >Bot</label>
-                            <input type="radio" id="human" name="oppo-select" value="human">
-                            <label for="human" class="radio-label">Human</label>
+                            <input type="radio" id="First" name="side-select" value="First" checked>
+                            <label for="First" class="radio-label" >First</label>
+                            <input type="radio" id="Second" name="side-select" value="Second">
+                            <label for="Second" class="radio-label">Second</label>
                         </span>
                     </div>
-                    <hr>
-                </div>
-                <!-- AI settings -->
-                <div class="settings-div">
-                  <label class="form-label" for="difficulty-select">Difficulty:</label>
-                  <select id="difficulty-select" name="difficulty-select">
-                    <option selected>Easy</option>
-                    <option>Medium</option>
-                    <option>Hard</option>
-                  </select>
-                </div>
-                <div class="settings-div">
-                    <label class="form-label">Side:</label>
-                    <span>
-                        <input type="radio" id="First" name="side-select" value="First" checked>
-                        <label for="First" class="radio-label" >First</label>
-                        <input type="radio" id="Second" name="side-select" value="Second">
-                        <label for="Second" class="radio-label">Second</label>
-                    </span>
-                </div>
 
-                <input type ="submit" value ="Start Game !" id="start-submit" class ="auth-button"  onsubmit="startGame()" >
-            </form>
-            <img src="logo.svg" alt="logo" height=64 width=64>
-        </div>
-        <div id="leave-dialog" class="dialog hidden">
-            You are about to leave the game.
-            <div>
-                <button id="button-confirm" class="leave-button">Confirm</button>
-                <button id="button-cancel" class="leave-button">Cancel</button>
+                    <input type ="submit" value ="Start Game !" id="start-submit" class ="auth-button"  onsubmit="startGame()" >
+                </form>
+                <img src="logo.svg" alt="logo" height=64 width=64>
+            </div>
+            <div id="leave-dialog" class="dialog hidden">
+                You are about to leave the game.
+                <div>
+                    <button id="button-confirm" class="leave-button">Confirm</button>
+                    <button id="button-cancel" class="leave-button">Cancel</button>
+                </div>
             </div>
         </div>
-      </div>
 
-      <script src="User.js"></script>
-      <script src="Bot.js"></script>
-      <script src="GameState.js"></script>
-      <script src="Scoreboard.js"></script>
-      <script src="Message.js"></script>
-      <script src="Seed.js"></script>
-      <script src="House.js"></script>
-      <script src="GameBoard.js"></script>
-      <script src="RequestHandler.js"></script>
-      <script src="Game.js"></script>
-      <script src="initialization.js"></script>
+        <script>module = {};</script>
+        <script src="User.js"></script>
+        <script src="Bot.js"></script>
+        <script src="GameState.js"></script>
+        <script src="Scoreboard.js"></script>
+        <script src="Message.js"></script>
+        <script src="Seed.js"></script>
+        <script src="House.js"></script>
+        <script src="GameBoard.js"></script>
+        <script src="RequestHandler.js"></script>
+        <script src="Game.js"></script>
+        <script src="initialization.js"></script>
     </body>
 </html>

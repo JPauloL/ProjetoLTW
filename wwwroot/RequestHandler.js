@@ -41,7 +41,7 @@ class RequestHandler
     {
         const params = { nick: this.user.nick, password: this.user.password, size: size, initial: seeds };
      
-        fetch(url + "join", {
+        my_fetch(url + "join", {
                 method: "POST",
                 body: JSON.stringify(params)
             })
@@ -61,7 +61,6 @@ class RequestHandler
 
         for (let i = 0; i < n; i++)
         {
-            // console.log(i + (!player * (n + 1)) + 1);
             if (newState[i] < oldState[i + (!player * (n + 1)) + 1])
             {
                 return i + (!player * (n + 1)) + 1;
@@ -69,11 +68,6 @@ class RequestHandler
         }
 
         return -1;
-    }
-
-    buildState(playerOne, playerTwo)
-    {
-        return [playerTwo.store].concat(playerOne.pits).concat(playerOne.store).concat(playerTwo.pits);
     }
 
     update(event, r)
@@ -109,9 +103,9 @@ class RequestHandler
 
             if (pos < 0 && turn != nameOne) turn = nameOne // Retirar na versao final
 
-            this.game.setState(this.buildState(sides[nameOne], sides[nameTwo]), turn === nameOne);
+            this.game.setState(GameState.buildState(sides[nameOne], sides[nameTwo]), turn === nameOne);
             this.game.play(pos, turn === nameOne);
-            console.log(this.buildState(sides[nameOne], sides[nameTwo]));
+            console.log(GameState.buildState(sides[nameOne], sides[nameTwo]));
         }
 
         if (data.winner !== undefined)
@@ -130,6 +124,7 @@ class RequestHandler
         this.gameId = null;    
         this.eventSource.close();
         submitButton.value = "Start game";
+        console.log("HERE");
 
         if (this.game != null && this.game.winner == undefined)
         {
@@ -145,7 +140,7 @@ class RequestHandler
         if (this.gameId === null) return;
 
         const params = {game: this.gameId, nick: this.user.nick, password: this.user.password};
-        fetch(url + "leave", {
+        my_fetch(url + "leave", {
                 method: "POST",
                 body: JSON.stringify(params)
             })
@@ -163,7 +158,7 @@ class RequestHandler
     async notify(pos)
     {
         const params = {game: this.gameId, nick: this.user.nick, password: this.user.password, move: pos - 1};
-        fetch(url + "notify", {
+        my_fetch(url + "notify", {
                 method: "POST",
                 body: JSON.stringify(params)
             })
