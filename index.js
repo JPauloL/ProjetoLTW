@@ -13,6 +13,8 @@ const port = 8008;
 // Final 
 // const port = 9030;
 
+const playTime = 120000;
+
 const postHeader = {
     'Access-Control-Allow-Origin': '*' 
     // "Access-Control-Allow-Methods": "POST" 
@@ -62,6 +64,12 @@ function okResponse(response, message)
     response.end(JSON.stringify(m));
 }
 
+function endGame(game, winner)
+{
+    updater.update(game, { winner: winner });
+    FileManager.deleteGame(game);
+}
+
 function leave(request, response)
 {
     let body = "";
@@ -80,11 +88,9 @@ function leave(request, response)
                     const players = Object.keys(board.sides);
                     
                     const winner = players.length == 1 ? null : (players[0] === data.nick ? players[1] : players[0]);
+                    endGame(data.game, winner);
 
-                    updater.update(data.game, { winner: winner });
-                    FileManager.deleteGame(data.game);
                     okResponse(response);
-                    
                 })
                 .catch((e) => e == undefined ? 
                 unauthorizedErrorResponse(response, "User isn't authenticated.") :
@@ -267,6 +273,15 @@ function notify(request, response)
                             FileManager.deleteGame(gameId);
                         }
                         
+                        setTimeout(() => {
+                            FileManager.getGame(gameId)
+                            .then((g) => {
+                                if (game.lastPlay === g.lastPlay) 
+                                    endGame(gameId, playerOne === g.board.turn ? playerTwo : playerOne);
+                            })
+                            .catch(console.log);
+                        }, playTime);
+
                         okResponse(response);
                         updater.update(gameId, res);
                     })
