@@ -43,7 +43,7 @@ class Game
         }
         else if (this.requestHandler === undefined)
         {
-            setTimeout(() => this.opponentPlay(this.bot.play(this.state.getState())), 1000);
+            setTimeout(() => this.opponentPlay(this.bot.play(this.state)), this.bot.difficulty != "Hard" ? 1000 : 0);
         }
 
     }
@@ -96,7 +96,7 @@ class Game
 
     finish()
     {
-        this.player = true;
+        this.player = false;
         this.gameBoard.setClickableHouses(false);
 
         const buttonsDiv = document.getElementById("buttons-div");
@@ -137,7 +137,7 @@ class Game
         console.log("Play: " + pos);
         
         if (this.isPlaying || this.state.getPlayer() || this.state.play(pos) < 0 || this.winner !== undefined) return -1;
-     
+        
         this.play((this.state.getSize() / 2) + pos, this.state.getPlayer());
         
         return 0;
@@ -170,12 +170,13 @@ class Game
             this.gameBoard.setClickableHouses(true);
         }
     
+        this.updateGameMessage((player ? this.playerOne : this.playerTwo) + "'s turn")
+
+
         if (this.bot !== null && !player)
         {
-            setTimeout(() => this.opponentPlay(this.bot.play(this.state.getState())), 1000);
+            setTimeout(() => this.opponentPlay(this.bot.play(this.state)), this.bot.difficulty != "Hard" ? 1000 : 0);
         }
-    
-        this.updateGameMessage((player ? this.playerOne : this.playerTwo) + "'s turn")
     }
 
     updateScoreboard()

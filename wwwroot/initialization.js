@@ -235,6 +235,5 @@ settingsForm.addEventListener("submit", e => {
             backDrop.classList.add("hidden");
             new Game(user.nick, "AI (" + params["difficulty-select"] + ")", size, seeds, params["side-select"] == "First" ? true : false, new Bot(params["difficulty-select"], null));
         }
-
     }
 });

@@ -50,7 +50,7 @@ class GameBoard
             this.houses[i].element.addEventListener("click", () => {
                 this.setClickableHouses(false);
                 
-                if (game.selfPlay(i) < 0 && game.player)
+                if (game.selfPlay(i) < 0 && game.state.player)
                 {
                     this.setClickableHouses(true);
                 }

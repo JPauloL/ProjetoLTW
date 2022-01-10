@@ -1,6 +1,3 @@
-let alpha = Number.MIN_VALUE; // Maximize
-let beta = Number.MAX_VALUE;  // Minimize
-
 class Bot
 {
     difficulty;
@@ -10,11 +7,6 @@ class Bot
         this.difficulty = difficulty;
     }
 
-    update(state)
-    {
-        return play(state);
-    }
-
     play(state)
     {
         return (this.difficulty == "Easy" ? this.easy(state) : (this.difficulty == "Medium" ? this.medium(state) : this.hard(state)));
@@ -22,72 +14,80 @@ class Bot
 
     easy(state)
     {
-        let r;
+        const depth = 3;
+        const res = this.minimax(state, depth, state.player);
+        console.log(res.value);
 
-        while (state[(r = Math.floor(Math.random() * ((state.length / 2) - 1)) + 1)] === 0);
-
-        return r;
+        return res.pos;
     }
 
     medium(state)
     {
-        // Placholder
-        let r;
-
-        while (state[(r = Math.floor(Math.random() * ((state.length / 2) - 1)) + 1)] === 0);
-
-        return r;
+        const depth = 5;
+        const res = this.minimax(state, depth, state.player);
+        console.log(res.value);
+        
+        return res.pos;
     }
 
     hard(state)
     {
-        // negamax com alpha beta prune
-        let r;
-
-        while (state[(r = Math.floor(Math.random() * ((state.length / 2) - 1)) + 1)] === 0);
-
-        return r;
+        const depth = 10;
+        const res = this.minimax(state, depth, state.player);
+        console.log(res.value);
+        return res.pos;
     }
-}
 
-// Alpha-Beta prune algorithm. Call alphaBeta(initialState, depth, Number.MIN_VALUE, Number.MAX_VALUE, true)
-function alphaBeta(state, depth, alpha, beta, maximizing)
-{
-    if (depth == 0 || isFinished(state))
-    for (let i = 1; i < state.length; i++)
+    getHeuristicValue(state)
     {
-        
+        const score = state.getGameScore();
+        return score;
     }
-    // slice: copiar o array
-}
 
-function minimax(state, depth, maximizing)
-{
-    if (depth == 0 || isFinished(state))
+    minimax(state, depth, maximizing)
     {
-        return state[(state.length - 2) / 2] - state[state.length - 1];
-    }
-    // slice: copiar o array
-
-    if (maximizing)
-    {
-        value = Number.MIN_VALUE;
-        for (let i = 0; i < (state.length - 2) / 2; i++)
+        if (depth == 0 || state.isFinal())
         {
-            if (state[i] == 0) continue;
-            let child = sow(state, i);
-
-            value = Math.max(value, minimax(child, depth - 1 , child[(state.length - 2) / 2] != state[(state.length - 2) / 2]));
+            return { pos: -1, value: this.getHeuristicValue(state) };
         }
 
-        return value;
-    }
+        if (maximizing)
+        {
+            let ret = { pos: -1, value: Number.NEGATIVE_INFINITY };
+            for (let i = 1; i < state.state.length / 2; i++)
+            {
+                let child = new GameState(null, null, state.player, state.state.slice());
+                if (child.play(i) < 0) continue;
 
-    value = Number.MAX_VALUE;
-    for (let i = 0; i < (state.length - 2) / 2; i++)
-    {
-        value = Math.min(value, minimax(sow(state, state.length - i - 1), depth - 1 , true));
-    }
+                const res = this.minimax(child, depth - 1 , child.player == state.player ? maximizing : !maximizing);
 
-    return value;
+                ret.value = Math.max(ret.value, res.value);
+
+                if (res.value === ret.value)
+                {
+                    ret.pos = i;
+                }
+            }
+
+            return ret;
+        }
+
+        let ret = { pos: -1, value: Number.POSITIVE_INFINITY };
+        for (let i = 1; i < state.state.length / 2; i++)
+        {
+            let child = new GameState(null, null, state.player, state.state.slice());
+            if (child.play(i) < 0) continue;
+
+            const res = this.minimax(child, depth - 1 , child.player == state.player ? maximizing : !maximizing);
+
+            ret.value = Math.min(ret.value, res.value);
+
+            if (res.value === ret.value)
+            {
+                ret.pos = i;
+            }
+        }
+
+        return ret;
+    }
 }

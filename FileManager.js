@@ -88,7 +88,7 @@ module.exports = class FileManager
                     return;
                 }
 
-                gameId = crypto.createHash("sha256").update(user.nick + (new Date().getTime().toString())).digest("hex");
+                gameId = crypto.createHash("md5").update(user.nick + (new Date().getTime().toString())).digest("hex");
                 games[gameId] = this.buildGameObject(user.nick, size, seeds);
 
                 fs.writeFile("games.json", JSON.stringify(games), (e) => e ? reject() : resolve({ game: { id: gameId, board: games[gameId].board } }));

@@ -106,7 +106,7 @@ class GameState
         const normPos = this.player ? pos : pos + this.state.length / 2;
         if (pos <= 0 || pos >= (this.state.length / 2) || this.state[normPos] === 0) return -1;
         
-        console.log("\n" + (this.player ? "Player 1: " : "Player 2: ") + pos + "\n");
+        // console.log("\n" + (this.player ? "Player 1: " : "Player 2: ") + pos + "\n");
         return this.sow(normPos);
     }
 
