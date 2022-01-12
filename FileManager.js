@@ -73,7 +73,14 @@ module.exports = class FileManager
                 }
 
                 let games = JSON.parse(data);
-                let gameId = Object.keys(games).find((k) => Object.keys(games[k].board.sides).length === 1 && games[k].board.sides[games[k].board.turn].pits.length === size && games[k].board.sides[games[k].board.turn].pits[0] === seeds);
+                let gameId;
+
+                if (gameId = Object.keys(games).find((k) => k.sides[user.nick] != undefined))
+                {
+                    return games[gameId];
+                }
+
+                gameId = Object.keys(games).find((k) => Object.keys(games[k].board.sides).length === 1 && games[k].board.sides[games[k].board.turn].pits.length === size && games[k].board.sides[games[k].board.turn].pits[0] === seeds);
 
                 if (gameId != undefined)
                 {
@@ -225,11 +232,25 @@ module.exports = class FileManager
     
             rankings.ranking = ranking;
     
-            // console.log(ranking);
-    
             fs.writeFile("rankings.json", JSON.stringify(rankings), (e) => {
                 if (e) console.log(e);
             });
         });
+    }
+
+    static getRanking()
+    {
+        return Promise((resolve, reject) => {
+            fs.readFile("rankings.json", (e, data) => {
+                if (e)
+                {
+                    reject();
+                }
+
+                const { ranking } = JSON.parse(data);
+
+                resolve({ ranking: ranking.slice(0, 10) });
+            })
+        })
     }
 }

@@ -14,7 +14,7 @@ class Bot
 
     easy(state)
     {
-        const depth = 3;
+        const depth = 1;
         const res = this.minimax(state, depth, state.player);
         console.log(res.value);
 
@@ -23,7 +23,7 @@ class Bot
 
     medium(state)
     {
-        const depth = 5;
+        const depth = 3;
         const res = this.minimax(state, depth, state.player);
         console.log(res.value);
         
@@ -32,7 +32,7 @@ class Bot
 
     hard(state)
     {
-        const depth = 10;
+        const depth = 5;
         const res = this.minimax(state, depth, state.player);
         console.log(res.value);
         return res.pos;

@@ -41,7 +41,7 @@ class RequestHandler
     {
         const params = { nick: this.user.nick, password: this.user.password, size: size, initial: seeds };
      
-        my_fetch(url + "join", {
+        fetch(url + "join", {
                 method: "POST",
                 body: JSON.stringify(params)
             })
@@ -139,7 +139,7 @@ class RequestHandler
         if (this.gameId === null) return;
 
         const params = {game: this.gameId, nick: this.user.nick, password: this.user.password};
-        my_fetch(url + "leave", {
+        fetch(url + "leave", {
                 method: "POST",
                 body: JSON.stringify(params)
             })
@@ -157,7 +157,7 @@ class RequestHandler
     async notify(pos)
     {
         const params = {game: this.gameId, nick: this.user.nick, password: this.user.password, move: pos - 1};
-        my_fetch(url + "notify", {
+        fetch(url + "notify", {
                 method: "POST",
                 body: JSON.stringify(params)
             })
