@@ -17,35 +17,39 @@
 
     </head>
     <body>
-
         <nav class="nav-bar">
             <div class="brand">
                 <img src="logo.svg" alt="logo" height=64 width=64>
                 <span>Play Mancala!</span>
             </div>
             <div class="auth">
-                <button id="sign-in-button" class="auth-button">Sign in</button>
-                <span id="name-area" class="hidden">
+                <button id="sign-in-button" class="orange-button">Sign in</button>
+                <div id="name-area" class="hidden">
                     <span id="name-display">
                         
                     </span>
-                    <a href="#" id="sign-out">
+                    <button href="#" id="sign-out" class="orange-button">
                         Sign out
-                    </a>
-                </span>
-                <!-- <button class="auth-button">Sign up</button> -->
+                    </button>
+                </div>
+                <!-- <button class="orange-button">Sign up</button> -->
             </div>
         </nav>
 
         <div id="page-content">
             <div id="initial-page">
-                <h1>Welcome to Play Mancala!</h1>
-                Create an account or sign in to start playing!
-                <div style="justify-content: center;">
+                <img src="logo.svg" class="mt-16" alt="logo" height=64 width=64>
+                <h1 id="initial-page-title">Welcome to Play Mancala!</h1>
+                <p id="initial-page-text">
+                    Create an account or sign in to start playing! Compete against other players or play against out powerful AI!
+                </p>
+                <div class="mt-16 home-buttons">
                     <button id="rules-button" class="initial-button">Rules</button>
                     <button id="ranking-button" class="initial-button">Ranking</button>
-                    <button id="play-button" class="initial-button">Start game</button>
+                    <button id="initial-sign-in-button" class="initial-button">Sign In</button>
+                    <button id="play-button" class="initial-button hidden">Start Game</button>
                 </div>
+
             </div>
             <div id="game-area" class="hidden">
             </div>
@@ -53,7 +57,7 @@
 
         <div id="back-drop" class="hidden">
             <div id="rules-dialog" class="dialog hidden">
-                Mancala rules
+                <h2>Mancala rules</h2>
                 <div id="rules">
                     <p>
                         Mancala is a two-player game. The players take turns sowing, until one of the players has no plays available.
@@ -68,24 +72,25 @@
             </div>
 
             <div id="ranking-dialog" class="dialog hidden">
+                <h2>Ranking</h2>
                 Ranking is empty.
             </div>
 
             <div id="auth-dialog" class="dialog hidden">
-                Sign in
+                <h2>Sign in</h2>
                 <form id="sign-in-form" class="dialog-form">
                     <label class="form-label" for="name-input">Username:</label>
                     <input id="name-input" name="nick" type="text" class="authInput">
                     <label class="form-label" for="password-input">Password:</label>
                     <input id="password-input" name="password" type="password" class="authInput">
-                    <input type="submit" class="auth-button auth-submit" value="Sign in">
+                    <button type="submit" class="orange-button mt-16">Sign in</button>
                     <span id="error-message" class="hidden">Your credentials are icorrect</span>
                 </form>
                 <img src="logo.svg" alt="logo" height=64 width=64>
             </div>
 
             <div id="settings-dialog" class="dialog hidden">
-                Game settings
+                <h2>Game settings</h2>
                 <form id="settings-form" class="dialog-form">
                     <div class="settings-div">
                         <label class="form-label" for="house-select">Number of houses:</label>
@@ -117,7 +122,7 @@
 
                     
                     <div>
-                        <hr>
+                        <hr class="mb-0">
                         <div class="settings-div">
                             <label class="form-label">Opponent:</label>
                             <span>
@@ -127,16 +132,20 @@
                                 <label for="human" class="radio-label">Human</label>
                             </span>
                         </div>
-                        <hr>
+                        <hr class="mb-0">
                     </div>
                     <!-- AI settings -->
+                        <h3 class="mb-0">
+                            AI Settings
+                        </h3>
+
                     <div class="settings-div">
-                    <label class="form-label" for="difficulty-select">Difficulty:</label>
-                    <select id="difficulty-select" name="difficulty-select">
-                        <option selected>Easy</option>
-                        <option>Medium</option>
-                        <option>Hard</option>
-                    </select>
+                        <label class="form-label" for="difficulty-select">Difficulty:</label>
+                        <select id="difficulty-select" name="difficulty-select">
+                            <option selected>Easy</option>
+                            <option>Medium</option>
+                            <option>Hard</option>
+                        </select>
                     </div>
                     <div class="settings-div">
                         <label class="form-label">Side:</label>
@@ -148,10 +157,11 @@
                         </span>
                     </div>
 
-                    <input type ="submit" value ="Start Game !" id="start-submit" class ="auth-button"  onsubmit="startGame()" >
+                    <button id="start-submit" type ="submit" class ="orange-button mt-16"  onsubmit="startGame()" >Start Game!</button>
                 </form>
                 <img src="logo.svg" alt="logo" height=64 width=64>
             </div>
+
             <div id="leave-dialog" class="dialog hidden">
                 You are about to leave the game.
                 <div>

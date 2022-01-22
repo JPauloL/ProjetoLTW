@@ -188,4 +188,9 @@ class Game
     {
         this.message.update(message, color);
     }
+
+    displayError(message)
+    {
+        this.message.error(message);
+    }
 }

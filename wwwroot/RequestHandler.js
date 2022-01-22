@@ -123,7 +123,7 @@ class RequestHandler
     {
         this.gameId = null;    
         this.eventSource.close();
-        submitButton.value = "Start game";
+        submitButton.innerText = "Start game";
 
         if (this.game != null && this.game.winner == undefined)
         {

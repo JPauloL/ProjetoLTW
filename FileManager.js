@@ -23,7 +23,6 @@ module.exports = class FileManager
     {
         return new Promise((resolve, reject) => {
             user.password = crypto.createHash("sha256").update(user.password).digest("hex");
-
             fs.readFile("credentials.json", (e, data) => {
                 if (e) 
                 {
@@ -75,7 +74,7 @@ module.exports = class FileManager
                 let games = JSON.parse(data);
                 let gameId;
 
-                if (gameId = Object.keys(games).find((k) => k.sides[user.nick] != undefined))
+                if ((gameId = Object.keys(games).find((k) => games[k].board.sides[user.nick] != undefined)) != undefined)
                 {
                     return games[gameId];
                 }

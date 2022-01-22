@@ -17,6 +17,8 @@ const errMessage = document.getElementById("error-message");
 const leaveCancel = document.getElementById("button-cancel");
 const leaveConfirm = document.getElementById("button-confirm");
 const submitButton = document.getElementById("start-submit");
+const initialSignInButton = document.getElementById("initial-sign-in-button");
+const initialPageText = document.getElementById("initial-page-text");
 
 // My debug server
 const url = "http://localhost:8008/";
@@ -27,80 +29,31 @@ const url = "http://localhost:8008/";
 // LTW Server
 // const url = "http://twserver.alunos.dcc.fc.up.pt:8008/";
 
-// function fetch(url, init)
-// {
-//     const method = init.method ?? 'GET';
-//     const body = init.body ?? JSON.stringify({});
-
-//     const xhr = new XMLHttpRequest();
-
-//     if (init.header != null)
-//     {
-//         xhr.setRequestHeader(init.header)
-//     }
-
-//     xhr.open(method, url)
-
-//     let p = new Promise((resolve, reject) => {
-//         xhr.onreadystatechange = () => {
-//             if(xhr.readyState == 4) 
-//             {
-//                 const response = {
-//                     status: xhr.status,
-//                     headers: xhr.getAllResponseHeaders(),
-//                     response: xhr.responseText,
-//                     statusText: xhr.statusText,
-
-//                     json: () => {
-//                         const r = xhr.responseText;
-                        
-//                         return new Promise((resolve, reject) => {
-                        
-//                             try 
-//                             {
-//                                 const j = JSON.parse(r);
-//                                 resolve(j);
-//                             }
-//                             catch (e)
-//                             {
-//                                 reject(e);
-//                             }
-//                         })
-//                     }
-//                 }
-                
-//                 if (xhr.status == 200)
-//                 {
-//                     resolve(response);
-//                 }
-//                 else
-//                 {
-//                     reject(response);
-//                 }
-//             }
-//         } 
-//     });
-
-//     xhr.send(body);
-//     return p;
-// }
-
-// fetch(url + "ranking", {
-//     method: "POST",
-//     body: JSON.stringify({})
-// })
-// .then((r) => r.json())
-// .then(console.log)
-// .catch(console.log);
-
 const requestHandler = new RequestHandler();
 let user = null;
+let game = null;
 
 function showUsername()
 {
+    initialSignInButton.classList.add("hidden");
     signInButton.classList.add("hidden");
+    
     nameDisplay.innerText = user.nick;
+    initialPageText.innerText = "Start a game against our powerful AI or search for a game against another player and climb the ranking with every win you get."
+    
     nameArea.classList.remove("hidden");
+    startButton.classList.remove("hidden");
+}
+
+function showGuestPage()
+{
+    nameArea.classList.add("hidden");
+    startButton.classList.add("hidden");
+
+    initialPageText.innerText = "Create an account or sign in to start playing! Compete against other players or play against out powerful AI!"
+
+    signInButton.classList.remove("hidden");
+    initialSignInButton.classList.remove("hidden");
 }
 
 function showDialog(dialog)
@@ -140,15 +93,16 @@ signInForm.addEventListener("submit", e => {
     e.preventDefault();
     const data = new FormData(signInForm);
     const props = ["nick", "password"];
-    
+
     const params = props.reduce((p, c) => ({...p, [c]: data.get(c)}), {});
+    console.log(params);
     
     fetch(url + "register", {
         method: "POST",
         body: JSON.stringify(params)
     })
     .then((r) => {
-        if (r.status === 200)
+        if (r.ok)
         {
             user = new User(params.nick, params.password);
             errMessage.classList.add("hidden");
@@ -174,6 +128,7 @@ function setDialogEvent(button, dialog)
                                     });
 }
 
+setDialogEvent(initialSignInButton, authDialog);
 setDialogEvent(signInButton, authDialog);
 setDialogEvent(rulesButton, rulesDialog);
 setDialogEvent(rankingButton, rankingDialog);
@@ -198,14 +153,32 @@ backDrop.addEventListener("click",
                             });
 
 signOut.addEventListener("click", () => {
+    let ongoingGame = null;
+
+    if (game != null && game.winner == undefined)
+    {    
+        ongoingGame = game;
+    }
+    else if (requestHandler.game != null && requestHandler.game.winner == undefined)
+    {
+        ongoingGame = requestHandler.game;
+    }
+
+    if (ongoingGame != null)
+    {
+        ongoingGame.displayError("Can't sign out during a match!");
+        return;
+    }
+    
     user = null;
+
     if (typeof(Storage) !== undefined)
     {
         localStorage.removeItem("nick");
         localStorage.removeItem("password");
     }
-    nameArea.classList.add("hidden");
-    signInButton.classList.remove("hidden");
+    
+    showGuestPage();
 });
 
 settingsForm.addEventListener("submit", e => {
@@ -227,13 +200,13 @@ settingsForm.addEventListener("submit", e => {
         else if (params["oppo-select"] === "human") // !Searching
         {
             requestHandler.join(size, seeds);
-            submitButton.value = "Cancel search";
+            submitButton.innerText = "Cancel search";
         }
         else
         {
             settingsDialog.classList.add("hidden");
             backDrop.classList.add("hidden");
-            new Game(user.nick, "AI (" + params["difficulty-select"] + ")", size, seeds, params["side-select"] == "First" ? true : false, new Bot(params["difficulty-select"], null));
+            game = new Game(user.nick, "AI (" + params["difficulty-select"] + ")", size, seeds, params["side-select"] == "First" ? true : false, new Bot(params["difficulty-select"], null));
         }
     }
 });

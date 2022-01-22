@@ -88,7 +88,7 @@ class GameBoard
         const seed = source.seeds.pop();
         const newPos = target.newSeedPosition();
 
-        this.playSeedAnimation(seed, newPos.x, newPos.y);
+        this.playSeedAnimation(seed, newPos.x, newPos.y, Date.now());
 
         target.seeds.push(seed);
         this.renderSeeds();
@@ -96,15 +96,23 @@ class GameBoard
         return 0;
     }
 
-    playSeedAnimation(seed, x, y)
+    playSeedAnimation(seed, x, y, start)
     {
-        if (seed.x === x && seed.y === y) return;
+        const delta = (Date.now() - start) / 5000;
 
-        // const eps = 1;
-        // seed.update(canvas, seed.x + eps, seed.y + eps);
-        seed.update(x, y);
+        if (delta >= 1)
+        {
+            console.log(start + " " + Date.now())
+            seed.update(x, y);
+            return;
+        }
 
-        // requestAnimationFrame(() => this.playSeedAnimation(seed, x, y));
+        var [newX, newY] = [seed.x + ((x - seed.x) * delta), seed.y + ((y - seed.y) * delta)];
+        
+        seed.update(newX, newY);
+        this.renderSeeds();
+
+        requestAnimationFrame(() => this.playSeedAnimation(seed, x, y, start));
     }
 
     renderSeeds()

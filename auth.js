@@ -14,18 +14,19 @@ module.exports = function register(request, response)
         .on("end", () => {
             try 
             {
+                
                 const { nick, password } = JSON.parse(body);
                 user = new User(nick, password);
-                
-                if (user.nick == null || user.password == null || user.nick == "" || user.nick.length > 20 || user.password == "")
+
+                if (user.nick == undefined || user.password == undefined || user.nick == null || user.password == null || user.nick == "" || user.nick.length > 20 || user.password == "")
                 {
                     responses.validateRequestErrorResponse(response, "Wrong nick/password.");
+                    return;
                 }
 
                 FileManager.getUser(user)
                 .then(() => responses.okResponse(response))
-                .catch(console.log)
-                .catch(() => responses.unauthorizedErrorResponse(response));
+                .catch(() => responses.unauthorizedErrorResponse(response, "Not authorized"));
             }
             catch (e)
             {

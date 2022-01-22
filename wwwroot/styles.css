@@ -30,7 +30,7 @@ body {
     margin-right: 16px;
 }
 
-.auth-button {
+.orange-button {
     background-color: sandybrown; /*#ff9955 cor do logo*/
     border: 4px transparent;
     border-radius: 0.25rem;
@@ -52,7 +52,7 @@ button:hover {
     cursor: pointer;
 }
 
-.auth-button:active {
+.orange-button:active {
     background-color: wheat;
     color: darkblue;
 }
@@ -61,6 +61,11 @@ button:hover {
     display: flex;
     justify-content: space-between;
     padding: 8px;
+}
+
+.home-buttons {
+    display: flex;
+    justify-content: space-evenly;
 }
 
 .game-button {
@@ -80,6 +85,8 @@ button:hover {
 
 #initial-page {
     text-align: center;
+    width: 30%;
+    color: navy;
 }
 
 .initial-button {
@@ -101,6 +108,10 @@ button:hover {
     margin-top: 40px;
 }
 
+.mt-16 {
+    margin-top: 16px;
+}
+
 .radio-label{
   font-size: medium;
   color: maroon;
@@ -114,24 +125,55 @@ button:hover {
 }
 
 .dialog {
-    background-color: lightgray;
+    background-color: gainsboro;
     border: 1px solid black;
     border-radius: 0.25rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 10;
+    z-index: 100;
     text-align: center;
     padding: 16px;
-    width: 20%;
     margin: auto;
-    margin-top: 48px;
-    margin-bottom: 48px;
-    min-height: 300px;
-    font-size: x-large;
-    font-weight: bold;
+    margin-top: 30px
+}
+
+#rules-dialog {
+    width: 30%;
     color: maroon;
+}
+
+#ranking-dialog {
+    width: 30%;
+    color: maroon;
+    min-height: 500px;
+}
+
+#leave-dialog {
+    margin-top: 300px;
+    min-height: 64px;
+    max-width: 30%;
+    font-size: larger;
+    display: block;
+}
+
+#auth-dialog {
+    width: 20%;
+    color: maroon;
+    min-height: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dialog-form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+    margin-top: 16px;
+    text-align: center;
+}
+
+#settings-dialog {
+    color: maroon;
+    width: 25%;
 }
 
 .settings-div {
@@ -141,18 +183,8 @@ button:hover {
     margin-top: 8px;
 }
 
-hr {
+.mb-0 {
     margin-bottom: 0px;
-}
-
-#rules-dialog {
-    width: 30%;
-}
-
-#leave-dialog {
-    min-height: 64px;
-    font-size: larger;
-    display: block;
 }
 
 .leave-button {
@@ -218,12 +250,6 @@ hr {
     padding: 12px;
 }
 
-#settings-form {
-    margin-bottom: 16px;
-    margin-top: 16px;
-    text-align: center;
-}
-
 .bank {
     height: 192px;
     width: 84px;
@@ -259,33 +285,11 @@ hr {
 #name-display {
     color: sandybrown;
     font-size: larger;
-}
-
-#name-area {
-    display: flex;
-    flex-direction: column;
-}
-
-#sign-out {
-    color: white;
-    align-self: flex-end;
-    font-size: small;
-}
-
-.dialog-form {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    justify-content: center;
+    margin-right: 8px;
 }
 
 .authInput {
     margin-bottom: 4px;
-}
-
-.auth-submit {
-    margin-top: 12px;
-    padding: 8px;
 }
 
 .form-label {
@@ -310,3 +314,4 @@ input[type=submit] {
 .hidden {
     display: none !important;
 }
+

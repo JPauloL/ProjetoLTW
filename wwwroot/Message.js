@@ -1,6 +1,7 @@
 class Message
 {
     message;
+    errorMessage;
     messagePanel;
 
     constructor(message)
@@ -31,5 +32,27 @@ class Message
     render()
     {
         return this.messagePanel;
+    }
+
+    error(message)
+    {
+        this.errorMessage = message;
+        this.messagePanel.innerText = message;
+
+        const color = this.messagePanel.style.color;
+        const fontWeight = this.messagePanel.style.fontWeight;
+
+        this.messagePanel.style.color = "red";
+        this.messagePanel.style.fontWeight = "bold";
+
+        setTimeout(() => {
+            if (message == this.messagePanel.innerText)
+            {
+                this.messagePanel.innerText = this.message;
+                this.messagePanel.style.color = color;
+                this.messagePanel.style.fontWeight = fontWeight;
+            }
+
+        }, 3000);
     }
 }
