@@ -197,7 +197,7 @@ module.exports = class FileManager
                 p1 = ranking.push({ 
                     nick: playerOne,
                     games: 0,
-                    wins: 0
+                    victories: 0
                 }) - 1;
             }
     
@@ -206,7 +206,7 @@ module.exports = class FileManager
                 p2 = ranking.push({ 
                     nick: playerTwo,
                     games: 0,
-                    wins: 0
+                    victories: 0
                 }) - 1;
             }
             
@@ -215,11 +215,11 @@ module.exports = class FileManager
     
             if (winner !== null)
             {
-                ranking[winner === playerOne ? p1 : p2].wins++;
+                ranking[winner === playerOne ? p1 : p2].victories++;
             }
     
             ranking.sort((p1, p2) => {
-                const cmp = p2.wins - p1.wins;
+                const cmp = p2.victories - p1.victories;
     
                 if (cmp)
                 {
@@ -239,17 +239,17 @@ module.exports = class FileManager
 
     static getRanking()
     {
-        return Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             fs.readFile("rankings.json", (e, data) => {
                 if (e)
                 {
                     reject();
+                    return;
                 }
-
                 const { ranking } = JSON.parse(data);
 
                 resolve({ ranking: ranking.slice(0, 10) });
-            })
-        })
+            });
+        });
     }
 }

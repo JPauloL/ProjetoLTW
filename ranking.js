@@ -10,5 +10,5 @@ module.exports.get = (request, response) =>
 {
     FileManager.getRanking()
     .then((ranking) => responses.okResponse(response, ranking))
-    .catch(responses.InternalErrorResponse(response, "Couldn't get rankings."));
+    .catch((e) => responses.InternalErrorResponse(response, "Couldn't get rankings."));
 }

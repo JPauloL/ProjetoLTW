@@ -45,7 +45,8 @@
                 </p>
                 <div class="mt-16 home-buttons">
                     <button id="rules-button" class="initial-button">Rules</button>
-                    <button id="ranking-button" class="initial-button">Ranking</button>
+                    <button id="local-ranking-button" class="initial-button">Local Ranking</button>
+                    <button id="global-ranking-button" class="initial-button">Global Ranking</button>
                     <button id="initial-sign-in-button" class="initial-button">Sign In</button>
                     <button id="play-button" class="initial-button hidden">Start Game</button>
                 </div>
@@ -71,9 +72,10 @@
                 <img src="logo.svg" alt="logo" height=64 width=64>
             </div>
 
-            <div id="ranking-dialog" class="dialog hidden">
-                <h2>Ranking</h2>
-                Ranking is empty.
+            <div id="local-ranking-dialog" class="dialog ranking-dialog hidden">
+            </div>
+
+            <div id="global-ranking-dialog" class="dialog ranking-dialog hidden">
             </div>
 
             <div id="auth-dialog" class="dialog hidden">

@@ -163,4 +163,13 @@ class RequestHandler
             })
             .catch(console.log);
     }
+
+    async getRanking()
+    {
+        return fetch(url + "ranking", {
+            method: "POST",
+            body: JSON.stringify({})
+        })
+            .then((r) => r.json())
+    }
 }

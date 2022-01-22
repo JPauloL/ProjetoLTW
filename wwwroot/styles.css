@@ -140,10 +140,13 @@ button:hover {
     color: maroon;
 }
 
-#ranking-dialog {
+.ranking-dialog {
     width: 30%;
     color: maroon;
     min-height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #leave-dialog {
@@ -307,8 +310,14 @@ button:hover {
     border-color: blue;
 }
 
-input[type=submit] {
-    cursor: pointer;
+table {
+    background-color: azure;
+    border-collapse: collapse;
+}
+
+table, td, th {
+    padding: 8px;
+    border: 1px solid maroon;
 }
 
 .hidden {

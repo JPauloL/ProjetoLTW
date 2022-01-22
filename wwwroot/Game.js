@@ -58,10 +58,20 @@ class Game
         rules.innerText = "Rules";
         setDialogEvent(rules, rulesDialog);
 
-        const ranking = document.createElement("button");
-        ranking.classList.add("game-button");
-        ranking.innerText = "Ranking";
-        setDialogEvent(ranking, rankingDialog);
+        const rankingDiv = document.createElement("div");
+
+        const localRanking = document.createElement("button");
+        localRanking.classList.add("game-button");
+        localRanking.innerText = "Local Ranking";
+        localRanking.addEventListener("click", openLocalRanking);
+
+        const globalRanking = document.createElement("button");
+        globalRanking.classList.add("game-button");
+        globalRanking.innerText = "Global Ranking";
+        globalRanking.addEventListener("click", openGlobalRanking)
+
+        rankingDiv.appendChild(localRanking);
+        rankingDiv.appendChild(globalRanking);
 
         const giveUp = document.createElement("button");
         giveUp.id = "give-up-button";
@@ -70,7 +80,7 @@ class Game
         setDialogEvent(giveUp, leaveDialog);
 
         buttonsDiv.appendChild(rules);
-        buttonsDiv.appendChild(ranking);
+        buttonsDiv.appendChild(rankingDiv);
         buttonsDiv.appendChild(giveUp);
 
         leaveConfirm.addEventListener("click", 
@@ -111,6 +121,8 @@ class Game
                                   (this.state.isFinal() ? ["You lose! Better luck next time", "red"] : ["You lose! You gave up", "red"]))));
         this.gameBoard.finishGame(this.state.getBank(true), this.state.getBank(false));
         this.updateScoreboard();
+        
+        updateRankings(this.winner);
     }
 
     selfPlay(pos)

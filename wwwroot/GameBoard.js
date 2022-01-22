@@ -102,7 +102,7 @@ class GameBoard
 
         if (delta >= 1)
         {
-            console.log(start + " " + Date.now())
+            // console.log(start + " " + Date.now())
             seed.update(x, y);
             return;
         }

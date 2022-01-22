@@ -7,8 +7,10 @@ const authDialog = document.getElementById("auth-dialog");
 const backDrop = document.getElementById("back-drop");
 const rulesButton = document.getElementById("rules-button");
 const rulesDialog = document.getElementById("rules-dialog");
-const rankingButton = document.getElementById("ranking-button");
-const rankingDialog = document.getElementById("ranking-dialog");
+const localRankingButton = document.getElementById("local-ranking-button");
+const localRankingDialog = document.getElementById("local-ranking-dialog");
+const globalRankingButton = document.getElementById("global-ranking-button");
+const globalRankingDialog = document.getElementById("global-ranking-dialog");
 const settingsDialog = document.getElementById("settings-dialog");
 const leaveDialog = document.getElementById("leave-dialog");
 const startButton = document.getElementById("play-button");
@@ -32,6 +34,38 @@ const url = "http://localhost:8008/";
 const requestHandler = new RequestHandler();
 let user = null;
 let game = null;
+let  globalRankings = null;
+let  localRankings = getLocalRankings();
+
+function getLocalRankings()
+{
+    if (typeof(Storage) !== undefined)
+    {
+        return JSON.parse(localStorage.getItem("rankings") ?? JSON.stringify({ ranking: [] })).ranking;
+    }
+}
+
+function updateRankings(winner)
+{
+    if (typeof(Storage) !== undefined)
+    {
+        let i = localRankings.findIndex((v) => v.nick == user.nick);
+        
+        if (i == -1)
+        {
+            i = localRankings.push({ nick: user.nick, victories: 0, games: 0 }) - 1;
+        }
+
+        localRankings[i].games++;
+
+        if (winner)
+        {
+            localRankings[i].victories++;
+        }
+
+        localStorage.setItem("rankings", JSON.stringify({ ranking: localRankings }));
+    }
+}
 
 function showUsername()
 {
@@ -118,6 +152,32 @@ signInForm.addEventListener("submit", e => {
     .catch(console.log);
 });
 
+function buildRankingTable(rankings)
+{
+    const table = document.createElement("table");
+
+    table.innerHTML = ` <tr>
+                            <th>Pos</th>
+                            <th>Player</th>
+                            <th>Wins</th>
+                            <th>Games</th>
+                        </tr>`;
+
+    rankings.forEach((v, i) => {
+        const row = document.createElement("tr");
+
+        row.innerHTML =  `  <tr>
+                                <td>${i + 1}</td>
+                                <td>${v.nick}</td>
+                                <td>${v.victories}</td>
+                                <td>${v.games}</td>
+                            </tr>`;
+
+        table.appendChild(row);
+    });
+
+    return table;
+}
 
 function setDialogEvent(button, dialog)
 {
@@ -131,8 +191,51 @@ function setDialogEvent(button, dialog)
 setDialogEvent(initialSignInButton, authDialog);
 setDialogEvent(signInButton, authDialog);
 setDialogEvent(rulesButton, rulesDialog);
-setDialogEvent(rankingButton, rankingDialog);
 setDialogEvent(startButton, settingsDialog);
+
+function openLocalRanking()
+{
+    localRankings = getLocalRankings();
+
+    if (localRankings.length == 0)
+    {
+        localRankingDialog.innerHTML = `   <h2>Local Ranking</h2>
+                                            Local ranking is empty.`;
+    }
+    else
+    {
+        localRankingDialog.innerHTML = `   <h2>Local Ranking</h2>`;
+        localRankingDialog.appendChild(buildRankingTable(localRankings));
+    }
+    showDialog(localRankingDialog);
+}
+
+function openGlobalRanking()
+{
+    requestHandler.getRanking()
+    .then((r) => {
+        globalRankings = r.ranking;
+
+        if (globalRankings.length == 0)
+        {
+            globalRankingDialog.innerHTML = `   <h2>Global Ranking</h2>
+                                                Global ranking is empty.`;
+        }
+        else
+        {
+            globalRankingDialog.innerHTML = `   <h2>Global Ranking</h2>`;
+            globalRankingDialog.appendChild(buildRankingTable(globalRankings));
+        }
+        showDialog(globalRankingDialog);
+    })
+    .catch(console.log);
+}
+
+localRankingDialog.addEventListener("click", (event) => {event.stopPropagation()});
+localRankingButton.addEventListener("click", openLocalRanking);
+
+globalRankingDialog.addEventListener("click", (event) => {event.stopPropagation()});
+globalRankingButton.addEventListener("click", openGlobalRanking);
 
 leaveConfirm.addEventListener("click", 
                                     () => {

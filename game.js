@@ -41,7 +41,7 @@ module.exports.registerForUpdates = (request, response) =>
             updater.update(query.game, { board: board })
         }
     })
-    .catch();
+    .catch(console.log);
 }
 
 module.exports.join = (request, response) =>
@@ -146,7 +146,7 @@ module.exports.notify = (request, response) =>
                             .then((g) => {
                                 if (game.lastPlay === g.lastPlay) 
                                     endGame(gameId, playerOne === g.board.turn ? playerTwo : playerOne, playerOne, playerTwo);
-                                    updater.update(data.gmae, { winner: playerOne === g.board.turn ? playerTwo : playerOne });
+                                    updater.update(g.game, { winner: playerOne === g.board.turn ? playerTwo : playerOne });
                             })
                             .catch(console.log);
                         }, playTime);
