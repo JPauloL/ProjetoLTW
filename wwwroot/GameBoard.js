@@ -88,31 +88,30 @@ class GameBoard
         const seed = source.seeds.pop();
         const newPos = target.newSeedPosition();
 
-        this.playSeedAnimation(seed, newPos.x, newPos.y, Date.now());
-
+        requestAnimationFrame((t) => this.playSeedAnimation(seed, seed.x, seed.y, newPos.x, newPos.y, t, t));
         target.seeds.push(seed);
         this.renderSeeds();
 
         return 0;
     }
 
-    playSeedAnimation(seed, x, y, start)
+    playSeedAnimation(seed, x, y, targetX, targetY, start, time)
     {
-        const delta = (Date.now() - start) / 5000;
+        console.log(time + " " + start)
+        const animTime = 500;
+        const delta = (time - start) / animTime;
 
         if (delta >= 1)
         {
-            // console.log(start + " " + Date.now())
-            seed.update(x, y);
+            console.log(delta);
+            seed.update(targetX, targetY);
             return;
         }
 
-        var [newX, newY] = [seed.x + ((x - seed.x) * delta), seed.y + ((y - seed.y) * delta)];
-        
-        seed.update(newX, newY);
+        seed.update(x + ((targetX - x) * (delta * delta)), y + ((targetY - y) * delta));
         this.renderSeeds();
 
-        requestAnimationFrame(() => this.playSeedAnimation(seed, x, y, start));
+        requestAnimationFrame((t) => this.playSeedAnimation(seed, x, y, targetX, targetY, start, t));
     }
 
     renderSeeds()
