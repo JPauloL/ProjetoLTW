@@ -207,6 +207,13 @@ function openLocalRanking()
         localRankingDialog.innerHTML = `   <h2>Local Ranking</h2>`;
         localRankingDialog.appendChild(buildRankingTable(localRankings));
     }
+
+    const img = document.createElement("img");
+    img.src = "logo.png";
+    img.width = "64";
+    img.height = "64";
+    localRankingDialog.appendChild(img);
+
     showDialog(localRankingDialog);
 }
 
@@ -226,6 +233,13 @@ function openGlobalRanking()
             globalRankingDialog.innerHTML = `   <h2>Global Ranking</h2>`;
             globalRankingDialog.appendChild(buildRankingTable(globalRankings));
         }
+
+        const img = document.createElement("img");
+        img.src = "logo.png";
+        img.width = "64";
+        img.height = "64";
+        globalRankingDialog.appendChild(img);
+
         showDialog(globalRankingDialog);
     })
     .catch(console.log);

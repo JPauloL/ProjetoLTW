@@ -6,11 +6,11 @@ const ranking = require("./ranking.js");
 const register = require("./auth.js");
 const responses = require("./responses.js");
 
-// Debug
+// Local
 const port = 8008;
 
-// Final 
-// const port = 9030;
+// twserver 
+// const port = 8930;
 
 function processPath(path, request, response)
 {

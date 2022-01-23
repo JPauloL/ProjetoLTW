@@ -2,24 +2,15 @@
 
 <html lang = en>
     <head>
-        <meta charset="UTF-8">        <!-- para caracteres acentuados   -->
+        <meta charset="UTF-8">
         <link rel="stylesheet" href="styles.css" type="text/css">
-        <title>Play Mancala</title>  <!-- texto na decoração da janela -->
-
-        <!-- favicons -->
-        <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-        <link rel="manifest" href="site.webmanifest">
-        <link rel="mask-icon" href="safari-pinned-tab.svg" color="#5bbad5">
-        <meta name="msapplication-TileColor" content="#00aba9">
-        <meta name="theme-color" content="#ffffff">
+        <title>Play Mancala</title>
 
     </head>
     <body>
         <nav class="nav-bar">
             <div class="brand">
-                <img src="logo.svg" alt="logo" height=64 width=64>
+                <img src="logo.png" alt="logo" height=64 width=64>
                 <span>Play Mancala!</span>
             </div>
             <div class="auth">
@@ -28,17 +19,16 @@
                     <span id="name-display">
                         
                     </span>
-                    <button href="#" id="sign-out" class="orange-button">
+                    <button id="sign-out" class="orange-button">
                         Sign out
                     </button>
                 </div>
-                <!-- <button class="orange-button">Sign up</button> -->
             </div>
         </nav>
 
         <div id="page-content">
             <div id="initial-page">
-                <img src="logo.svg" class="mt-16" alt="logo" height=64 width=64>
+                <img src="logo.png" class="mt-16" alt="logo" height=64 width=64>
                 <h1 id="initial-page-title">Welcome to Play Mancala!</h1>
                 <p id="initial-page-text">
                     Create an account or sign in to start playing! Compete against other players or play against out powerful AI!
@@ -69,7 +59,7 @@
                     <p>-Winner: When one of the players has no playable pits, the other player's seeds are transferred to their store. The player with the most seeds on their store, wins.</p>
                     <p class="rules-p">Have fun playing Mancala!</p>
                 </div>
-                <img src="logo.svg" alt="logo" height=64 width=64>
+                <img src="logo.png" alt="logo" height=64 width=64>
             </div>
 
             <div id="local-ranking-dialog" class="dialog ranking-dialog hidden">
@@ -88,7 +78,7 @@
                     <button type="submit" class="orange-button mt-16">Sign in</button>
                     <span id="error-message" class="hidden">Your credentials are icorrect</span>
                 </form>
-                <img src="logo.svg" alt="logo" height=64 width=64>
+                <img src="logo.png" alt="logo" height=64 width=64>
             </div>
 
             <div id="settings-dialog" class="dialog hidden">
@@ -97,16 +87,12 @@
                     <div class="settings-div">
                         <label class="form-label" for="house-select">Number of houses:</label>
                         <select id="house-select" name="house-select">
-                            <!-- <option>10</option> -->
                             <option>9</option>
                             <option>8</option>
                             <option>7</option>
                             <option selected>6</option>
                             <option>5</option>
                             <option>4</option>
-                            <!-- <option>3</option>
-                            <option>2</option>
-                            <option>1</option> -->
                         </select>
                     </div>
 
@@ -117,8 +103,6 @@
                             <option>5</option>
                             <option selected>4</option>
                             <option>3</option>
-                            <!-- <option>2</option>
-                            <option>1</option> -->
                         </select>
                     </div>
 
@@ -136,7 +120,6 @@
                         </div>
                         <hr class="mb-0">
                     </div>
-                    <!-- AI settings -->
                         <h3 class="mb-0">
                             AI Settings
                         </h3>
@@ -161,7 +144,7 @@
 
                     <button id="start-submit" type ="submit" class ="orange-button mt-16"  onsubmit="startGame()" >Start Game!</button>
                 </form>
-                <img src="logo.svg" alt="logo" height=64 width=64>
+                <img src="logo.png" alt="logo" height=64 width=64>
             </div>
 
             <div id="leave-dialog" class="dialog hidden">

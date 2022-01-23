@@ -1,6 +1,5 @@
 const fs = require("fs");
 const crypto = require("crypto");
-const { resolve } = require("path/posix");
 
 module.exports = class FileManager
 {
