@@ -12,12 +12,14 @@ const playTime = seconds * 1000; // play time in milliseconds
 
 function endGame(game, winner, playerOne, playerTwo)
 {
-    if (playerOne != null)
-    {
-        ranking.update(playerOne, playerTwo, winner);
-    }
-
-    FileManager.deleteGame(game);
+    FileManager.deleteGame(game)
+        .then(() => {
+            if (playerOne != null && playerTwo != null)
+            {
+                ranking.update(playerOne, playerTwo, winner);
+            }
+        })
+        .catch(console.log);
 }
 
 module.exports.registerForUpdates = (request, response) =>
@@ -186,9 +188,10 @@ module.exports.leave = (request, response) =>
                     const players = Object.keys(board.sides);
 
                     const winner = players.length == 1 ? null : (players[0] === data.nick ? players[1] : players[0]);
-                    endGame(data.game, winner, players[0], players[1]);
+                    
                     updater.update(data.game, { winner: winner });
-
+                    console.log("HERE")
+                    endGame(data.game, winner, players[0], players[1]);
                     responses.okResponse(response);
                 })
                 .catch((e) => e == undefined ? 

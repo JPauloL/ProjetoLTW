@@ -158,19 +158,27 @@ module.exports = class FileManager
 
     static deleteGame(game)
     {
-        fs.readFile("games.json", (e, data) => {
-            if (e)
-            {
-                return;
-            }
+        return new Promise ((resolve, reject) => { 
+                fs.readFile("games.json", (e, data) => {
+                if (e)
+                {
+                    reject();
+                    return;
+                }
 
-            let games = JSON.parse(data);
-            if (games[game] != undefined)
-            {
-                delete games[game];
-                fs.writeFile("games.json", JSON.stringify(games), () => {});
-            } 
-        })
+                let games = JSON.parse(data);
+                if (games[game] != undefined)
+                {
+                    delete games[game];
+                    fs.writeFile("games.json", JSON.stringify(games), () => {});
+                    resolve();
+                }
+                else
+                {
+                    reject();
+                }
+            });
+        });
     }
 
     static updateRankings(playerOne, playerTwo, winner)
@@ -180,13 +188,14 @@ module.exports = class FileManager
             {
                 return;
             }
+
             const rankings = JSON.parse(rankingsData);
     
             if (rankings.ranking == undefined)
             {
                 rankings.ranking = [];
             }
-    
+
             const ranking = rankings.ranking;
     
             let p1;
@@ -221,7 +230,7 @@ module.exports = class FileManager
             ranking.sort((p1, p2) => {
                 const cmp = p2.victories - p1.victories;
     
-                if (cmp)
+                if (cmp != 0)
                 {
                     return cmp;
                 }

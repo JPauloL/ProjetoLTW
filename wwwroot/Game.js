@@ -85,7 +85,7 @@ class Game
 
         leaveConfirm.addEventListener("click", 
                                                 () => {
-                                                    if (this.requestHandler !== undefined)
+                                                    if (this.requestHandler !== undefined && this.winner == undefined)
                                                     {
                                                         requestHandler.leave();
                                                     }
