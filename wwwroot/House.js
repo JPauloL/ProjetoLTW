@@ -1,5 +1,5 @@
 const colors = ["green", "yellow", "red", "blue"];
-// const colors = ["rgba(,0.3)","rgba(,0.3)","rgba(,0.3)","rgba(,0.3)"]
+
 class House
 {
     element;
@@ -26,11 +26,6 @@ class House
         {
            this.element.classList.remove("clickable");
         }
-    }
-
-    update()
-    {
-        // this.
     }
 
     render()

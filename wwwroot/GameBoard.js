@@ -34,7 +34,6 @@ class GameBoard
         this.houses.forEach(h => h.setPosition())
     }
 
-    // TODO: Retirar codigo duplicado se tiver tempo
     createHouses(s, seeds, game)
     {
         const size = s * 2 + 2;
@@ -152,9 +151,8 @@ class GameBoard
 
         const lastHouse = (pos + i - 1) % this.houses.length;
        
-        if (!this.houses[lastHouse].bank && this.isPlayerSide(playerBank, lastHouse) && this.houses[lastHouse].seeds.length === 1)// && this.houses[this.houses.length - lastHouse].seeds.length > 0)
+        if (!this.houses[lastHouse].bank && this.isPlayerSide(playerBank, lastHouse) && this.houses[lastHouse].seeds.length === 1)
         {
-            console.log("Capturing...");
             let target = this.houses[playerBank];
             this.transferSeed(this.houses[lastHouse], target);
             while (this.transferSeed(this.houses[this.houses.length - lastHouse], target) !== -1);
@@ -175,17 +173,5 @@ class GameBoard
     render(element)
     {
         return this.gameBoard;
-    }
-
-    //Apagar
-    toString()
-    {
-        let str = this.houses[0].seeds.length;
-
-        for (let i = 1; i < this.houses.length; i++)
-        {
-            str += "," + this.houses[i].seeds.length;
-        }
-        return str;
     }
 }

@@ -25,7 +25,7 @@ const initialPageText = document.getElementById("initial-page-text");
 // My debug server
 const url = "http://localhost:8008/";
 
-// My final server
+// My twserver
 // const url = "http://twserver.alunos.dcc.fc.up.pt:8930/";
 
 // LTW Server
@@ -129,7 +129,6 @@ signInForm.addEventListener("submit", e => {
     const props = ["nick", "password"];
 
     const params = props.reduce((p, c) => ({...p, [c]: data.get(c)}), {});
-    console.log(params);
     
     fetch(url + "register", {
         method: "POST",
@@ -310,11 +309,11 @@ settingsForm.addEventListener("submit", e => {
         const seeds = parseInt(params["seeds-select"]);
         const size = parseInt(params["house-select"]);
 
-        if (requestHandler.isSearchingForGame()) // Searching
+        if (requestHandler.isSearchingForGame())
         {
             requestHandler.leave();
         }
-        else if (params["oppo-select"] === "human") // !Searching
+        else if (params["oppo-select"] === "human")
         {
             requestHandler.join(size, seeds);
             submitButton.innerText = "Cancel search";

@@ -55,21 +55,6 @@ class RequestHandler
             .catch(console.log);
     }
 
-    getMove(oldState, newState, player)
-    {
-        const n = newState.length;
-
-        for (let i = 0; i < n; i++)
-        {
-            if (newState[i] < oldState[i + (!player * (n + 1)) + 1])
-            {
-                return i + (!player * (n + 1)) + 1;
-            }
-        }
-
-        return -1;
-    }
-
     update(event, r)
     {
         const data = JSON.parse(event.data);
@@ -96,16 +81,10 @@ class RequestHandler
                 return;
             }
             
-            const old = this.game.state.state;
-
-            const pos = (this.game.state.player ? this.getMove(old, sides[nameOne].pits, true) : this.getMove(old, sides[nameTwo].pits, false));
-            // console.log(pos);
-
-            if (pos < 0 && turn != nameOne) turn = nameOne // Retirar na versao final
+            const pos = data.pit + ((!this.game.state.player * (sides[nameOne].pits.length + 1)));
 
             this.game.setState(GameState.buildState(sides[nameOne], sides[nameTwo]), turn === nameOne);
             this.game.play(pos, turn === nameOne);
-            console.log(GameState.buildState(sides[nameOne], sides[nameTwo]));
         }
 
         if (data.winner !== undefined)
@@ -115,7 +94,7 @@ class RequestHandler
 
         if (data.error)
         {
-            console.log(error);
+
         }
     }
 
@@ -147,7 +126,6 @@ class RequestHandler
             .then(j => {
                 if (j.error !== undefined)
                 {
-                    console.log(j.error);
                     return;
                 }
             })

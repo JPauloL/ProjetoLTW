@@ -69,7 +69,7 @@ module.exports.join = (request, response) =>
                 .then(({ game, lastPlay }) => {
                     if (lastPlay !== undefined)
                     {
-                        setTimeout(() => {console.log("HERE")
+                        setTimeout(() => {
                             FileManager.getGame(game.id)
                             .then((g) => {
                                 if (lastPlay === g.lastPlay) 
@@ -134,7 +134,7 @@ module.exports.notify = (request, response) =>
                     FileManager.saveGame(gameId, game, gameState, playerOne, playerTwo)
                     .then((savedGame) => {
                         
-                        let res = { board: savedGame.board }
+                        let res = { board: savedGame.board, pit: pos }
 
                         if (gameState.isFinal())
                         {
