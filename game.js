@@ -66,17 +66,17 @@ module.exports.join = (request, response) =>
             FileManager.getUser(user)
             .then(() => {
                 FileManager.registerForGame(user, size, initial)
-                .then(({ game }) => {
-                    if (game.lastPlay !== undefined)
+                .then(({ game, lastPlay }) => {
+                    if (lastPlay !== undefined)
                     {
-                        setTimeout(() => {
+                        setTimeout(() => {console.log("HERE")
                             FileManager.getGame(game.id)
                             .then((g) => {
-                                if (game.lastPlay === g.lastPlay) 
+                                if (lastPlay === g.lastPlay) 
                                 {
                                     const [playerOne, playerTwo] = Object.keys(g.board.sides);
+                                    updater.update(game.id, { winner: playerOne === g.board.turn ? playerTwo : playerOne });
                                     endGame(game.id, playerOne === g.board.turn ? playerTwo : playerOne, playerOne, playerTwo);
-                                    updater.update(data.gmae, { winner: playerOne === g.board.turn ? playerTwo : playerOne });
                                 }
                             })
                             .catch(console.log);
@@ -142,14 +142,15 @@ module.exports.notify = (request, response) =>
                             res.winner = (score > 0 ? playerOne : (score < 0 ? playerTwo : null));
                             endGame(gameId, res.winner, playerOne, playerTwo);
                         }
-                        
+
                         setTimeout(() => {
                             FileManager.getGame(gameId)
                             .then((g) => {
                                 if (game.lastPlay === g.lastPlay) 
+                                    updater.update(gameId, { winner: playerOne === g.board.turn ? playerTwo : playerOne });
                                     endGame(gameId, playerOne === g.board.turn ? playerTwo : playerOne, playerOne, playerTwo);
-                                    updater.update(g.game, { winner: playerOne === g.board.turn ? playerTwo : playerOne });
-                            })
+
+                                })
                             .catch(console.log);
                         }, playTime);
 
@@ -190,7 +191,6 @@ module.exports.leave = (request, response) =>
                     const winner = players.length == 1 ? null : (players[0] === data.nick ? players[1] : players[0]);
                     
                     updater.update(data.game, { winner: winner });
-                    console.log("HERE")
                     endGame(data.game, winner, players[0], players[1]);
                     responses.okResponse(response);
                 })

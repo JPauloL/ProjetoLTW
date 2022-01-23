@@ -90,21 +90,19 @@ class GameBoard
 
         requestAnimationFrame((t) => this.playSeedAnimation(seed, seed.x, seed.y, newPos.x, newPos.y, t, t));
         target.seeds.push(seed);
-        this.renderSeeds();
 
         return 0;
     }
 
     playSeedAnimation(seed, x, y, targetX, targetY, start, time)
     {
-        console.log(time + " " + start)
         const animTime = 500;
         const delta = (time - start) / animTime;
 
         if (delta >= 1)
         {
-            console.log(delta);
             seed.update(targetX, targetY);
+            this.renderSeeds();
             return;
         }
 

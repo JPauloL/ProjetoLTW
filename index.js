@@ -14,7 +14,7 @@ const port = 8008;
 
 function processPath(path, request, response)
 {
-    const filePath =  "wwwroot" + (path === "/" ? "/index.html" : path); //join("wwwroot", path === "/" ? "index.html" : path);
+    const filePath =  "wwwroot" + (path === "/" ? "/index.html" : path);
     if (fs.existsSync(filePath))
     {
         console.log(filePath);

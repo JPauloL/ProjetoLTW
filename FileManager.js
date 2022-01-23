@@ -88,7 +88,7 @@ module.exports = class FileManager
                     }
                     games[gameId].lastPlay = Date.now();
 
-                    fs.writeFile("games.json", JSON.stringify(games), (e) => e ? reject() : resolve({ game: { id: gameId, board: games[gameId].board } }));
+                    fs.writeFile("games.json", JSON.stringify(games), (e) => e ? reject() : resolve({ game: { id: gameId, board: games[gameId].board }, lastPlay: games[gameId].lastPlay }));
 
                     return;
                 }
@@ -111,7 +111,7 @@ module.exports = class FileManager
                             return;
                         }
                         let games = JSON.parse(data);
-                        games[game] != undefined ? resolve(games[game]) : reject("game");
+                        games[game] != undefined ? resolve(games[game]) : reject("Game doesn't exist.");
                     })
                 });
     }
