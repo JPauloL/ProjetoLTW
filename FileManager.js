@@ -25,7 +25,7 @@ module.exports = class FileManager
             fs.readFile("credentials.json", (e, data) => {
                 if (e) 
                 {
-                    reject();
+                    reject("Internal server error.");
                     return;
                 }
 
@@ -39,7 +39,7 @@ module.exports = class FileManager
                     }
                     else
                     {
-                        reject();
+                        reject("User registered with a different password.");
                     }
                     return;
                 }
@@ -49,7 +49,7 @@ module.exports = class FileManager
                     fs.writeFile("credentials.json", JSON.stringify(users), (e) => {
                         if (e) 
                         {
-                            reject();
+                            reject("Internal server error.");
                             return;
                         }
         
@@ -66,7 +66,7 @@ module.exports = class FileManager
             fs.readFile("games.json", (e, data) => {
                 if (e)
                 {
-                    reject();
+                    reject("Internal server error.");
                     return;
                 }
 
@@ -88,7 +88,7 @@ module.exports = class FileManager
                     }
                     games[gameId].lastPlay = Date.now();
 
-                    fs.writeFile("games.json", JSON.stringify(games), (e) => e ? reject() : resolve({ game: { id: gameId, board: games[gameId].board }, lastPlay: games[gameId].lastPlay }));
+                    fs.writeFile("games.json", JSON.stringify(games), (e) => e ? reject("Internal server error.") : resolve({ game: { id: gameId, board: games[gameId].board }, lastPlay: games[gameId].lastPlay }));
 
                     return;
                 }
@@ -96,7 +96,7 @@ module.exports = class FileManager
                 gameId = crypto.createHash("md5").update(user.nick + (new Date().getTime().toString())).digest("hex");
                 games[gameId] = this.buildGameObject(user.nick, size, seeds);
 
-                fs.writeFile("games.json", JSON.stringify(games), (e) => e ? reject() : resolve({ game: { id: gameId, board: games[gameId].board } }));
+                fs.writeFile("games.json", JSON.stringify(games), (e) => e ? reject("Internal server error.") : resolve({ game: { id: gameId, board: games[gameId].board } }));
             });
         });
     }
@@ -107,7 +107,7 @@ module.exports = class FileManager
                     fs.readFile("games.json", (e, data) => {
                         if (e)
                         {
-                            reject();
+                            reject("Internal server error.");
                             return;
                         }
                         let games = JSON.parse(data);
@@ -136,7 +136,7 @@ module.exports = class FileManager
             fs.readFile("games.json", (e, data) => {
                 if (e)
                 {
-                    reject();
+                    reject("Internal server error.");
                     return;
                 }
 
@@ -146,7 +146,7 @@ module.exports = class FileManager
                 fs.writeFile("games.json", JSON.stringify(games), (e) => {
                     if (e) 
                     {
-                        reject();
+                        reject("Internal server error.");
                         return;
                     }
                     resolve(gameObj);
@@ -161,7 +161,7 @@ module.exports = class FileManager
                 fs.readFile("games.json", (e, data) => {
                 if (e)
                 {
-                    reject();
+                    reject("Internal server error.");
                     return;
                 }
 
@@ -174,7 +174,7 @@ module.exports = class FileManager
                 }
                 else
                 {
-                    reject();
+                    reject("Invalid game reference.");
                 }
             });
         });
@@ -251,7 +251,7 @@ module.exports = class FileManager
             fs.readFile("rankings.json", (e, data) => {
                 if (e)
                 {
-                    reject();
+                    reject("Internal server error.");
                     return;
                 }
                 const { ranking } = JSON.parse(data);

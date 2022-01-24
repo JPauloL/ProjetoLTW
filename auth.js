@@ -20,18 +20,19 @@ module.exports = function register(request, response)
 
                 if (user.nick == undefined || user.password == undefined || user.nick == null || user.password == null || user.nick == "" || user.nick.length > 20 || user.password == "")
                 {
-                    responses.validateRequestErrorResponse(response, "Wrong nick/password.");
+                    responses.validateRequestErrorResponse(response, "Invalid nick or password.");
                     return;
                 }
 
                 FileManager.getUser(user)
                 .then(() => responses.okResponse(response))
-                .catch(() => responses.unauthorizedErrorResponse(response, "Not authorized"));
+                .catch((r) => responses.unauthorizedErrorResponse(response, r));
             }
             catch (e)
             {
                 console.log(e);
-                responses.InternalErrorResponse(response);
+                responses.internalErrorResponse(response, "Internal server error.");
             }
-        });
+        })
+        .on("error", () => responses.internalErrorResponse(response, "Internal server error."));
 }

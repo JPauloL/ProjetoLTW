@@ -16,7 +16,6 @@ class Bot
     {
         const depth = 1;
         const res = this.minimax(state, depth, state.player);
-        console.log(res.value);
 
         return res.pos;
     }
@@ -25,7 +24,6 @@ class Bot
     {
         const depth = 3;
         const res = this.minimax(state, depth, state.player);
-        console.log(res.value);
         
         return res.pos;
     }
@@ -34,7 +32,6 @@ class Bot
     {
         const depth = 5;
         const res = this.minimax(state, depth, state.player);
-        console.log(res.value);
         return res.pos;
     }
 

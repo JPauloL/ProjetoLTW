@@ -37,6 +37,16 @@ class RequestHandler
         return this.isSearching;;
     }
 
+    displayError(message)
+    {
+        if (this.game != null)
+        {
+            this.game.displayError(message);
+        }
+
+        console.log(message);
+    }
+
     join(size, seeds)
     {
         const params = { nick: this.user.nick, password: this.user.password, size: size, initial: seeds };
@@ -45,9 +55,14 @@ class RequestHandler
                 method: "POST",
                 body: JSON.stringify(params)
             })
-            .then((r) => r.json()
-            )
+            .then((r) => r.json())
             .then(j => {
+                if (j.error != undefined)
+                {
+                    this.displayError(j.error)
+                    return;
+                }
+
                 this.isSearching = true;
                 this.gameId = j.game;
                 this.registerForUpdates();
@@ -63,7 +78,7 @@ class RequestHandler
         if (data.board !== undefined)
         {
             const gameData = data.board;
-            let {sides, turn} = gameData // Mudar para const na versao final
+            let {sides, turn} = gameData
             let [nameOne, nameTwo] = Object.keys(sides);
             const size = sides[nameOne].pits.length;
             const seeds = sides[nameOne].pits[0];
@@ -92,9 +107,9 @@ class RequestHandler
             this.cleanGame(data.winner);
         }
 
-        if (data.error)
+        if (data.error !== undefined)
         {
-
+            this.displayError(data.error);
         }
     }
 
@@ -112,7 +127,6 @@ class RequestHandler
         }
     }
 
-    // parece ok
     leave()
     {
         if (this.gameId === null) return;
@@ -124,12 +138,14 @@ class RequestHandler
             })
             .then((response) => response.json())
             .then(j => {
-                if (j.error !== undefined)
+                if (j.error === undefined)
                 {
                     return;
                 }
+
+                this.displayError(j.error);
             })
-            .catch(console.log);
+            .catch(() => this.displayError("Couldn't reach server."));
     }
 
     async notify(pos)
@@ -139,7 +155,15 @@ class RequestHandler
                 method: "POST",
                 body: JSON.stringify(params)
             })
-            .catch(console.log);
+            .then((r) => r.json())
+            .then((j) => {
+                if (j.error != undefined)
+                {
+                    this.displayError(j.error)
+                    this.game.gameBoard.setClickableHouses(true);
+                }
+            })
+            .catch(() => this.displayError("Couldn't reach server."));
     }
 
     async getRanking()

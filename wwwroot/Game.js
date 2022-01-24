@@ -122,13 +122,14 @@ class Game
         this.gameBoard.finishGame(this.state.getBank(true), this.state.getBank(false));
         this.updateScoreboard();
         
-        updateRankings(this.winner);
+        if (this.bot !== undefined)
+        {
+            updateRankings(this.winner);
+        }
     }
 
     selfPlay(pos)
     {
-        console.log("Play: " + pos);
-        
         if (this.isPlaying || !this.state.getPlayer() || this.winner !== undefined) return -1;
 
         if (this.requestHandler === undefined) 
@@ -146,8 +147,6 @@ class Game
 
     opponentPlay(pos)
     {
-        console.log("Play: " + pos);
-        
         if (this.isPlaying || this.state.getPlayer() || this.state.play(pos) < 0 || this.winner !== undefined) return -1;
         
         this.play((this.state.getSize() / 2) + pos, this.state.getPlayer());

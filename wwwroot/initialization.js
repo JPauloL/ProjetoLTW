@@ -143,12 +143,19 @@ signInForm.addEventListener("submit", e => {
             showUsername();
             saveCredentials(user.nick, user.password);
         }
-        else if (r.status === 401)
+        else
         {
-            errMessage.classList.remove("hidden");
+            r.json().then((j) => {
+                errMessage.innerText = j.error;
+                errMessage.classList.remove("hidden");
+            })
+            .catch(console.log);
         }
     })
-    .catch(console.log);
+    .catch(() => {
+        errMessage.innerText = "Couldn't connect to the server.";
+        errMessage.classList.remove("hidden");
+    });
 });
 
 function buildRankingTable(rankings)

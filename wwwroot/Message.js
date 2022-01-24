@@ -25,6 +25,7 @@ class Message
         }
         else
         {
+            this.messagePanel.style.color = "white";
             this.messagePanel.style.fontWeight = "normal";    
         }
     }
@@ -43,7 +44,7 @@ class Message
         const fontWeight = this.messagePanel.style.fontWeight;
 
         this.messagePanel.style.color = "red";
-        this.messagePanel.style.fontWeight = "bold";
+        this.messagePanel.style.fontWeight = "normal";
 
         setTimeout(() => {
             if (message == this.messagePanel.innerText)

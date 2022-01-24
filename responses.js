@@ -14,7 +14,7 @@ module.exports.plainHeader = plainHeader;
 module.exports.SSEHeader = SSEHeader;
 
 // Outros erros
-module.exports.InternalErrorResponse = (response, message) =>
+module.exports.internalErrorResponse = (response, message) =>
 {
     response.writeHead(500, plainHeader);
     response.end(JSON.stringify({error: message}));

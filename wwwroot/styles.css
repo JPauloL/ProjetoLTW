@@ -1,5 +1,3 @@
-/* dark blue: #081447 */
-
 body {
     background-color: lightsteelblue;
     margin: 0;
@@ -31,7 +29,7 @@ body {
 }
 
 .orange-button {
-    background-color: sandybrown; /*#ff9955 cor do logo*/
+    background-color: sandybrown;
     border: 4px transparent;
     border-radius: 0.25rem;
     color: darkblue;
@@ -203,7 +201,7 @@ button:hover {
 }
 
 #game-area {
-    background-color: #803300; /* saddle brown ??? */
+    background-color: #803300;
     display: inline-block;
     margin-top: 8px;
 }
@@ -258,7 +256,7 @@ button:hover {
     height: 192px;
     width: 84px;
     margin: 8px 12px;
-    border-radius: 44%; /* alterar se tamanho mudar */
+    border-radius: 44%;
     background-color: sandybrown;
     border: 4px inset gainsboro
 }
@@ -324,4 +322,3 @@ table, td, th {
 .hidden {
     display: none !important;
 }
-
