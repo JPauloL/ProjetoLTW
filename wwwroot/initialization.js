@@ -83,9 +83,11 @@ function showGuestPage()
 {
     nameArea.classList.add("hidden");
     startButton.classList.add("hidden");
+    document.getElementById("game-area").classList.add("hidden");
 
     initialPageText.innerText = "Create an account or sign in to start playing! Compete against other players or play against out powerful AI!"
 
+    document.getElementById("initial-page").classList.remove("hidden");
     signInButton.classList.remove("hidden");
     initialSignInButton.classList.remove("hidden");
 }

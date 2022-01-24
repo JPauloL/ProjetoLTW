@@ -85,17 +85,18 @@ module.exports.join = (request, response) =>
 
                     responses.okResponse(response, { game: game.id });
                 })
-                .catch(() => responses.InternalErrorResponse(response));
+                .catch((r) => responses.internalErrorResponse(response, r));
             })
-            .catch(() => responses.unauthorizedErrorResponse(response));
+            .catch((r) => responses.unauthorizedErrorResponse(response, r));
             
         }
         catch (e)
         {
             console.log(e);             
-            responses.InternalErrorResponse(response);
+            responses.internalErrorResponse(response, "Internal server error.");
         }
-    });
+    })
+    .on("error", () => responses.internalErrorResponse(response, "Internal server error."));
 }
 
 module.exports.notify = (request, response) =>
@@ -116,15 +117,16 @@ module.exports.notify = (request, response) =>
             .then(() => {
                 FileManager.getGame(gameId)
                 .then((game) => {
-                    if (user.nick !== game.board.turn)
+                    if (user.nick !== game.board.turn || Object.keys(game.board.sides).length == 1)
                     {
                         responses.validateRequestErrorResponse(response, "Not your turn to play.");
                         return;
                     }
+
                     const [playerOne, playerTwo] = Object.keys(game.board.sides);
                     const gameState = new GameState(null, null, game.board.turn === playerOne, GameState.buildState(game.board.sides[playerOne], game.board.sides[playerTwo]));
 
-                    if (gameState.play(pos) < 0 )
+                    if (gameState.play(pos) < 0)
                     {
                         responses.validateRequestErrorResponse(response, "Invalid move.");
                         return;
@@ -146,7 +148,7 @@ module.exports.notify = (request, response) =>
                         setTimeout(() => {
                             FileManager.getGame(gameId)
                             .then((g) => {
-                                if (game.lastPlay === g.lastPlay) 
+                                if (savedGame.lastPlay === g.lastPlay)
                                     updater.update(gameId, { winner: playerOne === g.board.turn ? playerTwo : playerOne });
                                     endGame(gameId, playerOne === g.board.turn ? playerTwo : playerOne, playerOne, playerTwo);
 
@@ -157,18 +159,19 @@ module.exports.notify = (request, response) =>
                         responses.okResponse(response);
                         updater.update(gameId, res);
                     })
-                    .catch(() => responses.InternalErrorResponse(response, "Internal error."));
+                    .catch(() => responses.internalErrorResponse(response, "Internal server error."));
                 })
-                .catch(() => responses.validateRequestErrorResponse(response, "Game doesn't exist."));
+                .catch((r) => responses.validateRequestErrorResponse(response, r));
             })
-            .catch(() => responses.unauthorizedErrorResponse(response, "Unauthenticated."));
+            .catch((r) => responses.unauthorizedErrorResponse(response, r));
         }
         catch (e)
         {               
             console.log(e);             
-            responses.InternalErrorResponse(response);
+            responses.internalErrorResponse(response, "Internal server error.");
         }
-    });
+    })
+    .on("error", () => responses.internalErrorResponse(response, "Internal server error."));
 }
 
 module.exports.leave = (request, response) =>
@@ -194,15 +197,16 @@ module.exports.leave = (request, response) =>
                     endGame(data.game, winner, players[0], players[1]);
                     responses.okResponse(response);
                 })
-                .catch((e) => e == undefined ? 
-                responses.unauthorizedErrorResponse(response, "User isn't authenticated.") :
-                responses.validateRequestErrorResponse(response, "Game doesn't exist"));
+                .catch((r) => r == "User registered with a different password." ? 
+                responses.unauthorizedErrorResponse(response, r) :
+                responses.validateRequestErrorResponse(response, r));
             });
         }
         catch (e)
         {
             console.log(e);
-            responses.InternalErrorResponse(response);
+            responses.internalErrorResponse(response, "Internal server error.");
         }
-    });
+    })
+    .on("error", () => responses.internalErrorResponse(response, "Internal server error."));
 }
