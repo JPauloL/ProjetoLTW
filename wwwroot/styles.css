@@ -92,6 +92,13 @@ button:hover {
     color: navy;
 }
 
+#initial-brand-name {
+    color: sandybrown;
+    background-color: darkblue;
+    padding: 4px 8px;
+    border-radius: 15px;
+}
+
 .initial-button {
     background-color: rgba(0, 0, 0, 0.1);
     border: 2px solid darkblue;
