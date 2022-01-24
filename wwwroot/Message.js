@@ -3,6 +3,8 @@ class Message
     message;
     errorMessage;
     messagePanel;
+    previousColor;
+    previousFontWeight;
 
     constructor(message)
     {
@@ -37,11 +39,12 @@ class Message
 
     error(message)
     {
+        this.previousColor = this.messagePanel.innerText == this.errorMessage ? this.previousColor : this.messagePanel.style.color;
+        this.previousFontWeight = this.messagePanel.innerText == this.errorMessage ? this.previousFontWeight : this.messagePanel.style.fontWeight;
+        
         this.errorMessage = message;
         this.messagePanel.innerText = message;
 
-        const color = this.messagePanel.style.color;
-        const fontWeight = this.messagePanel.style.fontWeight;
 
         this.messagePanel.style.color = "red";
         this.messagePanel.style.fontWeight = "normal";
@@ -50,8 +53,8 @@ class Message
             if (message == this.messagePanel.innerText)
             {
                 this.messagePanel.innerText = this.message;
-                this.messagePanel.style.color = color;
-                this.messagePanel.style.fontWeight = fontWeight;
+                this.messagePanel.style.color = this.previousColor;
+                this.messagePanel.style.fontWeight = this.previousFontWeight;
             }
 
         }, 3000);

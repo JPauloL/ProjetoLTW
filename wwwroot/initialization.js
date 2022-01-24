@@ -303,6 +303,17 @@ signOut.addEventListener("click", () => {
         localStorage.removeItem("password");
     }
     
+    const buttonsDiv = document.getElementById("buttons-div");
+
+    if (buttonsDiv != null && buttonsDiv.contains(startButton))
+    {
+        buttonsDiv.removeChild(startButton);
+        startButton.classList.remove("game-button");
+        startButton.classList.add("initial-button");
+        startButton.innerText = "Start Game";
+        document.querySelector(".home-buttons").appendChild(startButton);
+    }
+
     showGuestPage();
 });
 
